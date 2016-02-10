@@ -43,7 +43,7 @@ public class Player {
     {
         pos = new Vector2(x, y);
         vel = new Vector2(0f,0f);
-        touch = new Vector2(AvoidanceGame.getX(), AvoidanceGame.getY());
+        touch = new Vector2(TheLastBlueGame.getX(), TheLastBlueGame.getY());
         rand = new Random();
     }
 
@@ -63,7 +63,7 @@ public class Player {
 
     public boolean update(List<Enemy> enemies)
     {
-        float cap = 4000f* AvoidanceGame.getScaleConstant(), accel = 40f, mult = 1f;
+        float cap = 4000f* TheLastBlueGame.getScaleConstant(), accel = 40f, mult = 1f;
         if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
             mult = 0;
             accel = 500;
@@ -77,10 +77,10 @@ public class Player {
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT))
             vel.x = Math.max(-cap,vel.x*mult - accel);
         if (Gdx.input.justTouched())
-            touch.set(AvoidanceGame.getX(), AvoidanceGame.getY());
+            touch.set(TheLastBlueGame.getX(), TheLastBlueGame.getY());
         else if (Gdx.input.isTouched())
         {
-            Vector2 delta = new Vector2(AvoidanceGame.getX(), AvoidanceGame.getY());
+            Vector2 delta = new Vector2(TheLastBlueGame.getX(), TheLastBlueGame.getY());
             delta.sub(touch);
             delta.scl(TOUCH_MULTIPLY);
             vel.set(delta);
@@ -97,8 +97,8 @@ public class Player {
         }
         pos.add(vel.x*Gdx.graphics.getDeltaTime(), vel.y*Gdx.graphics.getDeltaTime());
         float oldX = pos.x, oldY = pos.y;
-        pos.x = Math.max(Math.min(AvoidanceGame.getSX()-RADIUS,pos.x),0);
-        pos.y = Math.max(Math.min(AvoidanceGame.getSY()-RADIUS,pos.y),0);
+        pos.x = Math.max(Math.min(TheLastBlueGame.getSX()-RADIUS,pos.x),0);
+        pos.y = Math.max(Math.min(TheLastBlueGame.getSY()-RADIUS,pos.y),0);
         if (oldX != pos.x)
             vel.x = 0;
         if (oldY != pos.y)

@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class AvoidanceGame implements ApplicationListener
+public class TheLastBlueGame implements ApplicationListener
 {
     private ShapeRenderer shapeRenderer;
     private OrthographicCamera cam;

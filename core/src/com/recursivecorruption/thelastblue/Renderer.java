@@ -117,7 +117,7 @@ public class Renderer
         int vertexCount = (idx / NUM_COMPONENTS);
 
         //update the camera with our Y-up coordiantes
-        cam.setToOrtho(false, AvoidanceGame.getSX(), AvoidanceGame.getSY());
+        cam.setToOrtho(false, TheLastBlueGame.getSX(), TheLastBlueGame.getSY());
 
         //start the shader before setting any uniforms
         shader.begin();

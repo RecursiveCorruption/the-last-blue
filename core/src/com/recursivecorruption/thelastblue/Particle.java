@@ -39,11 +39,11 @@ public class Particle {
         x += vx;
         y += vy;
         if (noFade) {
-            if (x> AvoidanceGame.getSX())
+            if (x> TheLastBlueGame.getSX())
                 vx = -Math.abs(vx);
             else if (x< 0)
                 vx = Math.abs(vx);
-            if (y> AvoidanceGame.getSY())
+            if (y> TheLastBlueGame.getSY())
                 vy = -Math.abs(vy);
             else if (y< 0)
                 vy = Math.abs(vy);

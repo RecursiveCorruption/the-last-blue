@@ -2,11 +2,11 @@ package com.recursivecorruption.thelastblue.desktop;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import com.recursivecorruption.thelastblue.AvoidanceGame;
+import com.recursivecorruption.thelastblue.TheLastBlueGame;
 
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		new LwjglApplication(new AvoidanceGame(), config);
+		new LwjglApplication(new TheLastBlueGame(), config);
 	}
 }
