@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.recursivecorruption.thelastblue.graphics.Graphics;
+import com.recursivecorruption.thelastblue.graphics.Renderer;
 
 import java.util.List;
 import java.util.Random;
@@ -48,14 +49,11 @@ public class Player {
         rand = new Random();
     }
 
-    public void draw(ShapeRenderer shapeRenderer)
+    public void draw(Renderer renderer)
     {
-        shapeRenderer.setColor(COLOR);
-        shapeRenderer.rect(pos.x,pos.y,RADIUS,RADIUS);
-        if (Gdx.input.isTouched()) {
-            shapeRenderer.setColor(Color.GRAY);
-            shapeRenderer.circle(touch.x,touch.y, 20f);
-        }
+        renderer.square(COLOR, pos.x,pos.y,RADIUS);
+        if (Gdx.input.isTouched())
+            renderer.circle(Color.GRAY, touch.x,touch.y, 20f);
     }
     private static float accel(float velo)
     {

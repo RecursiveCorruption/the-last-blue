@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 
 public class Renderer
@@ -80,10 +81,13 @@ public class Renderer
 
     //The index position
     private int idx = 0;
+    private ShapeRenderer shapeRenderer;
 
     public Renderer(OrthographicCamera cam)
     {
         batch = new SpriteBatch();
+        shapeRenderer = new ShapeRenderer();
+        shapeRenderer.setProjectionMatrix(cam.combined);
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("MontereyFLF.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = (int)(70f/Gdx.graphics.getDensity());
@@ -104,16 +108,31 @@ public class Renderer
     public void begin()
     {
         batch.begin();
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
     }
 
     public void end()
     {
+        shapeRenderer.end();
         batch.end();
     }
 
     public void resize(OrthographicCamera cam)
     {
         batch.setProjectionMatrix(cam.combined);
+        shapeRenderer.setProjectionMatrix(cam.combined);
+    }
+
+    public void square(Color color, float x, float y, float radius)
+    {
+        shapeRenderer.setColor(color);
+        shapeRenderer.rect(x, y, radius, radius);
+    }
+
+    public void circle(Color color, float x, float y, float radius)
+    {
+        shapeRenderer.setColor(Color.GRAY);
+        shapeRenderer.circle(x,y, 20f);
     }
 
     /*1 --- 2

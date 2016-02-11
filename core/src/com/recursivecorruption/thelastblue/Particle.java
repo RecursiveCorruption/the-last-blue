@@ -3,6 +3,7 @@ package com.recursivecorruption.thelastblue;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.recursivecorruption.thelastblue.graphics.Graphics;
+import com.recursivecorruption.thelastblue.graphics.Renderer;
 
 public class Particle {
     private final float FRICTION = 2f;
@@ -28,11 +29,10 @@ public class Particle {
     public Particle(float x, float y, float vx, float vy, Color color, float radius) {
         this(x, y, vx, vy, color, radius, false);
     }
-    public void draw(ShapeRenderer shapeRenderer)
+    public void draw(Renderer renderer)
     {
         color.a = (float)life/(float)FULL_LIFE;
-        shapeRenderer.setColor(color);
-        shapeRenderer.rect(x, y, radius, radius);
+        renderer.square(color,x,y,radius);
     }
 
     boolean update()

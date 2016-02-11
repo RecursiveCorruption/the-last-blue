@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
+import com.recursivecorruption.thelastblue.graphics.Renderer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,10 +55,9 @@ public class Enemy
         return this.pos.x + this.radius >= pos.x && this.pos.x <= pos.x + radius && this.pos.y + this.radius >= pos.y && this.pos.y <= pos.y + radius;
     }
 
-    public void draw(ShapeRenderer shapeRenderer)
+    public void draw(Renderer renderer)
     {
-        shapeRenderer.setColor(color);
-        shapeRenderer.rect(pos.x, pos.y, radius, radius);
+        renderer.square(color, pos.x, pos.y, radius);
     }
 
     private void recalcColor()

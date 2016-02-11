@@ -19,7 +19,6 @@ import java.util.Random;
 
 public class TheLastBlueGame implements ApplicationListener
 {
-    private ShapeRenderer shapeRenderer;
     private OrthographicCamera cam;
     private List<Enemy> enemies;
     private List<Particle> particles;
@@ -42,9 +41,6 @@ public class TheLastBlueGame implements ApplicationListener
 	{
         cam = new OrthographicCamera(Graphics.getSX(), Graphics.getSY());
         cam.setToOrtho(true, Graphics.getSX(), Graphics.getSY());
-
-        shapeRenderer = new ShapeRenderer();
-        shapeRenderer.setProjectionMatrix(cam.combined);
         rand = new Random();
         renderer = new Renderer(cam);
         reset();
@@ -55,7 +51,6 @@ public class TheLastBlueGame implements ApplicationListener
 	{
         cam.setToOrtho(true, Graphics.getSX(), Graphics.getSY());
         renderer.resize(cam);
-        shapeRenderer.setProjectionMatrix(cam.combined);
 	}
 
     private void reset()
@@ -140,16 +135,14 @@ public class TheLastBlueGame implements ApplicationListener
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         cam.update();
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        renderer.begin();
         for (Particle i:particles)
-            i.draw(shapeRenderer);
+            i.draw(renderer);
         if (state==State.PLAY) {
             for (Enemy i:enemies)
-                i.draw(shapeRenderer);
-            player.draw(shapeRenderer);
+                i.draw(renderer);
+            player.draw(renderer);
         }
-        shapeRenderer.end();
-        renderer.begin();
         renderer.printCentered((int)(0.8f * Graphics.getSY()),Integer.toString(player.score+(int)Math.pow((double)(maxRad-15f),2f)));
         if (state!=State.PLAY)
         {
