@@ -106,16 +106,20 @@ public class Renderer
         shader = createMeshShader();
     }
 
-    public void begin()
+    public void begin(boolean shape)
     {
-        batch.begin();
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        if (shape)
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        else
+            batch.begin();
     }
 
     public void end()
     {
-        shapeRenderer.end();
-        batch.end();
+        if (batch.isDrawing())
+            batch.end();
+        else
+            shapeRenderer.end();
     }
 
     public void resize(OrthographicCamera cam)

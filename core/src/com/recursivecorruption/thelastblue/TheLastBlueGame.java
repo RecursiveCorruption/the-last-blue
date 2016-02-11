@@ -132,15 +132,17 @@ public class TheLastBlueGame implements ApplicationListener
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         cam.update();
-        renderer.begin();
-        /*for (Particle i:particles)
-            i.draw(renderer);*/
+        renderer.begin(true);
+        for (Particle i:particles)
+            i.draw(renderer);
         if (state==State.PLAY) {
             for (Enemy i:enemies)
                 i.draw(renderer);
             player.draw(renderer);
         }
-        renderer.printCentered((int)(0.8f * Graphics.getSY()),Integer.toString(player.score+(int)Math.pow((double)(maxRad-15f),2f)));
+        renderer.end();
+        renderer.begin(false);
+        renderer.printCentered((int) (0.8f * Graphics.getSY()), Integer.toString(player.score + (int) Math.pow((double) (maxRad - 15f), 2f)));
         if (state!=State.PLAY)
         {
             renderer.printCentered((int)(0.4f * Graphics.getSY()),"Avoid the blue boxes");
