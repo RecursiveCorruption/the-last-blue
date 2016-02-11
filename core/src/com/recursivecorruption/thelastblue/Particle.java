@@ -2,6 +2,7 @@ package com.recursivecorruption.thelastblue;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.recursivecorruption.thelastblue.graphics.Graphics;
 
 public class Particle {
     private final float FRICTION = 2f;
@@ -39,11 +40,11 @@ public class Particle {
         x += vx;
         y += vy;
         if (noFade) {
-            if (x> TheLastBlueGame.getSX())
+            if (x> Graphics.getSX())
                 vx = -Math.abs(vx);
             else if (x< 0)
                 vx = Math.abs(vx);
-            if (y> TheLastBlueGame.getSY())
+            if (y> Graphics.getSY())
                 vy = -Math.abs(vy);
             else if (y< 0)
                 vy = Math.abs(vy);

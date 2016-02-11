@@ -1,7 +1,6 @@
 package com.recursivecorruption.thelastblue;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.ApplicationListener;
@@ -10,6 +9,9 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+
+import com.recursivecorruption.thelastblue.graphics.Graphics;
+import com.recursivecorruption.thelastblue.graphics.Renderer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,10 +27,9 @@ public class TheLastBlueGame implements ApplicationListener
     private Random rand;
     private Player player;
     private int maxRad;
-    private SpriteBatch batch;
     private State state = State.BEGIN;
 
-    private static float SCREEN_SCALE = 1.5f;
+    private Renderer renderer;
 
     private enum State
     {
@@ -36,73 +37,30 @@ public class TheLastBlueGame implements ApplicationListener
         PLAY
     }
 
-    public static float getScaleConstant()
-    {
-        return SCREEN_SCALE/((Gdx.graphics.getDensity()+(Gdx.graphics.getHeight()/630f))/2f);
-    }
-
-    public static int getX()
-    {
-        return (int)(getScaleConstant()*Gdx.input.getX());
-    }
-
-    public static int getY()
-    {
-        return (int)(getScaleConstant()*Gdx.input.getY());
-    }
-
-    public static int getSX()
-    {
-        return (int)(getScaleConstant()*Gdx.graphics.getWidth());
-    }
-
-    public static int getSY()
-    {
-        return (int)(getScaleConstant()*Gdx.graphics.getHeight());
-    }
-
-    private void printCentered(int y, String message)
-    {
-        GlyphLayout glyphLayout = new GlyphLayout();
-        glyphLayout.setText(font, message);
-        font.draw(batch,glyphLayout, getSX()/2f-glyphLayout.width / 2f, y - glyphLayout.height / 2f);
-    }
-
-	@Override
+    @Override
 	public void create()
 	{
-        batch = new SpriteBatch();
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("MontereyFLF.ttf"));
-
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = (int)(70f/Gdx.graphics.getDensity());
-        parameter.characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.!'()>?: ";
-        parameter.flip = true;
-        font = new BitmapFont();
-        font.setColor(Color.WHITE);
-        font = generator.generateFont(parameter);
-        generator.dispose();
-        cam = new OrthographicCamera(getSX(),getSY());
-        cam.setToOrtho(true, getSX(), getSY());
-        batch.setProjectionMatrix(cam.combined);
+        cam = new OrthographicCamera(Graphics.getSX(), Graphics.getSY());
+        cam.setToOrtho(true, Graphics.getSX(), Graphics.getSY());
 
         shapeRenderer = new ShapeRenderer();
         shapeRenderer.setProjectionMatrix(cam.combined);
         rand = new Random();
+        renderer = new Renderer(cam);
         reset();
 	}
 
 	@Override
 	public void resize(int width, int height)
 	{
-        cam.setToOrtho(true, getSX(), getSY());
-        batch.setProjectionMatrix(cam.combined);
+        cam.setToOrtho(true, Graphics.getSX(), Graphics.getSY());
+        renderer.resize(cam);
         shapeRenderer.setProjectionMatrix(cam.combined);
 	}
 
     private void reset()
     {
-        player = new Player(getSX()/2f,getSY()/2f);
+        player = new Player(Graphics.getSX()/2f, Graphics.getSY()/2f);
         enemies = new ArrayList<Enemy>();
         particles = new ArrayList<Particle>();
     }
@@ -135,12 +93,12 @@ public class TheLastBlueGame implements ApplicationListener
         }
 
         if (enemies.size()<50 && rand.nextInt(2+((100*1000)/(1000+player.score+(int)Math.pow((double)maxRad,2f))))==1) {
-            int width = rand.nextInt(getSX());
-            int height = rand.nextInt(getSY());
+            int width = rand.nextInt(Graphics.getSX());
+            int height = rand.nextInt(Graphics.getSY());
             if (rand.nextInt(2)==1)
-                width =  getSX()*rand.nextInt(2);
+                width =  Graphics.getSX()*rand.nextInt(2);
             else
-                height =  getSY()*rand.nextInt(2);
+                height =  Graphics.getSY()*rand.nextInt(2);
             enemies.add(new Enemy(width,height));
         }
         boolean restart;
@@ -191,14 +149,14 @@ public class TheLastBlueGame implements ApplicationListener
             player.draw(shapeRenderer);
         }
         shapeRenderer.end();
-        batch.begin();
-        printCentered((int)(0.8f * getSY()),Integer.toString(player.score+(int)Math.pow((double)(maxRad-15f),2f)));
+        renderer.begin();
+        renderer.printCentered((int)(0.8f * Graphics.getSY()),Integer.toString(player.score+(int)Math.pow((double)(maxRad-15f),2f)));
         if (state!=State.PLAY)
         {
-            printCentered((int)(0.4f * getSY()),"Avoid the blue boxes");
-            printCentered((int)(0.6f * getSY()),"Tap to begin");
+            renderer.printCentered((int)(0.4f * Graphics.getSY()),"Avoid the blue boxes");
+            renderer.printCentered((int)(0.6f * Graphics.getSY()),"Tap to begin");
         }
-        batch.end();
+        renderer.end();
         Gdx.gl.glDisable(GL20.GL_BLEND);
 	}
 

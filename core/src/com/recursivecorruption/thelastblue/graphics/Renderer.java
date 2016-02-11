@@ -1,4 +1,4 @@
-package com.recursivecorruption.thelastblue;
+package com.recursivecorruption.thelastblue.graphics;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -7,6 +7,11 @@ import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.VertexAttribute;
 import com.badlogic.gdx.graphics.VertexAttributes;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 
@@ -31,6 +36,9 @@ public class Renderer
                     "void main() {\n" +
                     "	gl_FragColor = vColor;\n" +
                     "}";
+
+    private BitmapFont font;
+    private Batch batch;
 
     protected static ShaderProgram createMeshShader()
     {
@@ -73,15 +81,41 @@ public class Renderer
     //The index position
     private int idx = 0;
 
-    public void Renderer()
+    public Renderer(OrthographicCamera cam)
     {
+        batch = new SpriteBatch();
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("MontereyFLF.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size = (int)(70f/Gdx.graphics.getDensity());
+        parameter.characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.!'()>?: ";
+        parameter.flip = true;
+        font = new BitmapFont();
+        font.setColor(Color.WHITE);
+        font = generator.generateFont(parameter);
+        generator.dispose();
+        batch.setProjectionMatrix(cam.combined);
         mesh = new Mesh(true, MAX_VERTS, 0,
                 new VertexAttribute(VertexAttributes.Usage.Position, POSITION_COMPONENTS, "a_position"),
                 new VertexAttribute(VertexAttributes.Usage.ColorUnpacked, COLOR_COMPONENTS, "a_color"));
 
         shader = createMeshShader();
-        cam = new OrthographicCamera();
     }
+
+    public void begin()
+    {
+        batch.begin();
+    }
+
+    public void end()
+    {
+        batch.end();
+    }
+
+    public void resize(OrthographicCamera cam)
+    {
+        batch.setProjectionMatrix(cam.combined);
+    }
+
     /*1 --- 2
       |     |
       |     |
@@ -117,7 +151,7 @@ public class Renderer
         int vertexCount = (idx / NUM_COMPONENTS);
 
         //update the camera with our Y-up coordiantes
-        cam.setToOrtho(false, TheLastBlueGame.getSX(), TheLastBlueGame.getSY());
+        cam.setToOrtho(false, Graphics.getSX(), Graphics.getSY());
 
         //start the shader before setting any uniforms
         shader.begin();
@@ -176,5 +210,12 @@ public class Renderer
     {
         mesh.dispose();
         shader.dispose();
+    }
+
+    public void printCentered(int y, String message)
+    {
+        GlyphLayout glyphLayout = new GlyphLayout();
+        glyphLayout.setText(font, message);
+        font.draw(batch,glyphLayout, Graphics.getSX()/2f-glyphLayout.width / 2f, y - glyphLayout.height / 2f);
     }
 }
