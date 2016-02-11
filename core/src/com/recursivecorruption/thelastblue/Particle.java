@@ -6,22 +6,16 @@ import com.badlogic.gdx.math.Vector2;
 import com.recursivecorruption.thelastblue.graphics.Graphics;
 import com.recursivecorruption.thelastblue.graphics.Renderer;
 
-public class Particle {
+public class Particle extends Entity{
     private final float FRICTION = 2f;
-    private Vector2 pos, vel;
-    private float radius;
     private final int FULL_LIFE = 200;
     private int life;
-    private final Color color;
     public static final float PARTICLE_SIZE = 5f;
     private final boolean noFade;
 
     public Particle(float x, float y, float vx, float vy, Color color, float radius, boolean noFade)
     {
-        pos = new Vector2(x,y);
-        vel = new Vector2(vx,vy);
-        this.color = new Color(color);
-        this.radius = radius;
+        super(color, radius, x,y,vx,vy);
         life = FULL_LIFE;
         this.noFade = noFade;
     }
