@@ -8,19 +8,18 @@ import com.recursivecorruption.thelastblue.graphics.Renderer;
 
 public class Particle {
     private final float FRICTION = 2f;
-    private float x, y,vx,vy, radius;
+    private Vector2 pos, vel;
+    private float radius;
     private final int FULL_LIFE = 200;
     private int life;
-    private Color color;
+    private final Color color;
     public static final float PARTICLE_SIZE = 5f;
-    private boolean noFade;
+    private final boolean noFade;
 
     public Particle(float x, float y, float vx, float vy, Color color, float radius, boolean noFade)
     {
-        this.x = x;
-        this.y = y;
-        this.vx = vx;
-        this.vy = vy;
+        pos = new Vector2(x,y);
+        vel = new Vector2(vx,vy);
         this.color = new Color(color);
         this.radius = radius;
         life = FULL_LIFE;
@@ -33,22 +32,21 @@ public class Particle {
     public void draw(Renderer renderer)
     {
         color.a = (float)life/(float)FULL_LIFE;
-        renderer.square(color, new Vector2(x, y), radius);
+        renderer.square(color, pos, radius);
     }
 
     boolean update()
     {
-        x += vx;
-        y += vy;
+        pos.add(vel);
         if (noFade) {
-            if (x> Graphics.getSX())
-                vx = -Math.abs(vx);
-            else if (x< 0)
-                vx = Math.abs(vx);
-            if (y> Graphics.getSY())
-                vy = -Math.abs(vy);
-            else if (y< 0)
-                vy = Math.abs(vy);
+            if (pos.x> Graphics.getSX())
+                vel.x = -Math.abs(vel.x);
+            else if (pos.y< 0)
+                vel.y = Math.abs(vel.y);
+            if (pos.y> Graphics.getSY())
+                vel.y = -Math.abs(vel.y);
+            else if (pos.y< 0)
+                vel.y = Math.abs(vel.y);
             return false;
         }
         else

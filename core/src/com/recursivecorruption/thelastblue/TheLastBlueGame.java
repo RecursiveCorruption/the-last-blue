@@ -133,8 +133,8 @@ public class TheLastBlueGame implements ApplicationListener
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         cam.update();
         renderer.begin();
-        for (Particle i:particles)
-            i.draw(renderer);
+        /*for (Particle i:particles)
+            i.draw(renderer);*/
         if (state==State.PLAY) {
             for (Enemy i:enemies)
                 i.draw(renderer);
