@@ -2,6 +2,7 @@ package com.recursivecorruption.thelastblue;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector2;
 import com.recursivecorruption.thelastblue.graphics.Graphics;
 import com.recursivecorruption.thelastblue.graphics.Renderer;
 
@@ -32,7 +33,7 @@ public class Particle {
     public void draw(Renderer renderer)
     {
         color.a = (float)life/(float)FULL_LIFE;
-        renderer.square(color,x,y,radius);
+        renderer.square(color, new Vector2(x, y), radius);
     }
 
     boolean update()

@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Random;
 
 public class Player {
-    private Vector2 pos, vel, touch;
+    private Vector2 pos, vel;
     public final static float FRICTION = 2f, RADIUS = 30f, TOUCH_MULTIPLY = 4.0f;
     public static final Color COLOR = Color.FIREBRICK;
     public int score = 0;
@@ -45,15 +45,14 @@ public class Player {
     {
         pos = new Vector2(x, y);
         vel = new Vector2(0f,0f);
-        touch = new Vector2(Graphics.getX(), Graphics.getY());
         rand = new Random();
     }
 
     public void draw(Renderer renderer)
     {
-        renderer.square(COLOR, pos.x,pos.y,RADIUS);
+        renderer.square(COLOR, pos, RADIUS);
         if (Gdx.input.isTouched())
-            renderer.circle(Color.GRAY, touch.x,touch.y, 20f);
+            renderer.circle(Color.GRAY, InputProcessor.getInit(), 20f);
     }
     private static float accel(float velo)
     {
@@ -68,22 +67,15 @@ public class Player {
             accel = 500;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.DOWN))
-            vel.y = Math.min(cap, vel.y*mult + accel);
+            vel.y = Math.min(cap, vel.y * mult + accel);
         if (Gdx.input.isKeyPressed(Input.Keys.UP))
-            vel.y = Math.max(-cap, vel.y*mult - accel);
+            vel.y = Math.max(-cap, vel.y * mult - accel);
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT))
-            vel.x = Math.min(cap,vel.x*mult+accel);
+            vel.x = Math.min(cap, vel.x * mult + accel);
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT))
             vel.x = Math.max(-cap,vel.x*mult - accel);
-        if (Gdx.input.justTouched())
-            touch.set(Graphics.getX(), Graphics.getY());
         else if (Gdx.input.isTouched())
-        {
-            Vector2 delta = new Vector2(Graphics.getX(), Graphics.getY());
-            delta.sub(touch);
-            delta.scl(TOUCH_MULTIPLY);
-            vel.set(delta);
-        }
+            vel.set(InputProcessor.getDelta().scl(TOUCH_MULTIPLY));
         else if (!vel.epsilonEquals(0f,0f,0.0001f))
         {
             float xS = vel.x<0?-1:1;

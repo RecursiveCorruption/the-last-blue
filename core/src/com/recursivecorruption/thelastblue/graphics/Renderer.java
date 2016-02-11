@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 
 public class Renderer
@@ -123,16 +124,16 @@ public class Renderer
         shapeRenderer.setProjectionMatrix(cam.combined);
     }
 
-    public void square(Color color, float x, float y, float radius)
+    public void square(Color color, Vector2 pos, float radius)
     {
         shapeRenderer.setColor(color);
-        shapeRenderer.rect(x, y, radius, radius);
+        shapeRenderer.rect(pos.x, pos.y, radius, radius);
     }
 
-    public void circle(Color color, float x, float y, float radius)
+    public void circle(Color color, Vector2 pos, float radius)
     {
         shapeRenderer.setColor(Color.GRAY);
-        shapeRenderer.circle(x,y, 20f);
+        shapeRenderer.circle(pos.x,pos.y, 20f);
     }
 
     /*1 --- 2

@@ -57,7 +57,7 @@ public class Enemy
 
     public void draw(Renderer renderer)
     {
-        renderer.square(color, pos.x, pos.y, radius);
+        renderer.square(color, pos, radius);
     }
 
     private void recalcColor()
