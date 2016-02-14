@@ -23,14 +23,10 @@ public class Particle extends Entity{
     public Particle(float x, float y, float vx, float vy, Color color, float radius) {
         this(x, y, vx, vy, color, radius, false);
     }
-    public void draw(Renderer renderer)
-    {
-        color.a = (float)life/(float)FULL_LIFE;
-        renderer.square(color, pos, radius);
-    }
 
     boolean update()
     {
+        color.a = (float)life/(float)FULL_LIFE;
         pos.add(vel);
         if (noFade) {
             if (pos.x> Graphics.getSX())

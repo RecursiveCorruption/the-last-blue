@@ -1,5 +1,6 @@
 package com.recursivecorruption.thelastblue;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
@@ -101,7 +102,7 @@ public class TheLastBlueGame implements ApplicationListener
             List<Enemy> remove = new ArrayList<Enemy>();
             for (Enemy i : enemies) {
                 maxRad = Math.max(maxRad,(int)i.radius);
-                if (i.update(player.getPos(), enemies, particles))
+                if (i.update(player, enemies, particles))
                 {
                     if (i.radius>Enemy.EXPLODE_SIZE) {
                         player.score += Math.pow(i.radius,2);
@@ -133,6 +134,8 @@ public class TheLastBlueGame implements ApplicationListener
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         cam.update();
         renderer.begin(true);
+        if (Gdx.input.isTouched())
+            renderer.circle(Color.GRAY, InputProcessor.getInit(), 20f);
         for (Particle i:particles)
             i.draw(renderer);
         if (state==State.PLAY) {

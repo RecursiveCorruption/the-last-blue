@@ -10,21 +10,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class Enemy
+public class Enemy extends Entity
 {
     private float speed;
-    private Vector2 pos;
     public static float EXPLODE_SIZE = 65f;
     private static float EXPLODE_AREA = (float)Math.pow(EXPLODE_SIZE,2);
-    public float radius = 15f;
-    public Color color;
     private double angle = -200.25f;
     private Random rand;
 
     public Enemy(float x, float y)
     {
-        pos = new Vector2(x,y);
-        color = Color.BLUE;
+        super(Color.BLUE,15f,x,y,0,0);
         recalcColor();
         recalcSpeed();
         rand = new Random();
@@ -45,21 +41,6 @@ public class Enemy
                 particles.add(new Particle(x,y,vx*0.3f+(rand.nextFloat()-0.5f), vy*0.3f+(rand.nextFloat()-0.5f), color, Particle.PARTICLE_SIZE, noFade));
     }
 
-    private boolean collides(Enemy enemy)
-    {
-        return collides(enemy.pos,enemy.radius);
-    }
-
-    public boolean collides(Vector2 pos, float radius)
-    {
-        return this.pos.x + this.radius >= pos.x && this.pos.x <= pos.x + radius && this.pos.y + this.radius >= pos.y && this.pos.y <= pos.y + radius;
-    }
-
-    public void draw(Renderer renderer)
-    {
-        renderer.square(color, pos, radius);
-    }
-
     private void recalcColor()
     {
         color = new Color(radius/EXPLODE_SIZE, 0.1f,1-radius/EXPLODE_SIZE,1f);
@@ -70,7 +51,7 @@ public class Enemy
         speed = 5f;//(float)(50.0 - 50.0*EXPLODE_AREA/((EXPLODE_AREA-Math.min(Math.pow((double)radius,2.0),EXPLODE_AREA-1.0))));
     }
 
-    public boolean update(Vector2 playerPos, List<Enemy> peers, List<Particle> particles)
+    public boolean update(Entity player, List<Enemy> peers, List<Particle> particles)
     {
         List<Enemy> remove = new ArrayList<Enemy>();
         for (Enemy i:peers)
@@ -97,7 +78,7 @@ public class Enemy
                 }
             }
         }
-        Vector2 delta = new Vector2(playerPos);
+        Vector2 delta = new Vector2(player.pos);
         delta.sub(pos);
         double newAngle = delta.angleRad();
         if (newAngle>Math.PI)
