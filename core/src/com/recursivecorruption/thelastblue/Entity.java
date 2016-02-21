@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.recursivecorruption.thelastblue.graphics.Renderer;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -31,16 +32,18 @@ public abstract class Entity {
         renderer.square(color, pos, radius);
     }
 
-    public void createParticles()
+    public List<Entity> createParticles()
     {
-        createParticles(false);
+        return createParticles(false);
     }
 
-    public void createParticles(boolean noFade)
+    public List<Entity> createParticles(boolean noFade)
     {
+        List<Entity> particles = new ArrayList<Entity>();
         for (float x = pos.x; x <= pos.x+radius;x+= Particle.PARTICLE_SIZE)
             for (float y = pos.y; y <= pos.y+radius;y+= Particle.PARTICLE_SIZE)
-                entities.add(new Particle(x,y,vel.x*0.3f+(rand.nextFloat()-0.5f), vel.y*0.3f+(rand.nextFloat()-0.5f), color, Particle.PARTICLE_SIZE, entities, noFade));
+                particles.add(new Particle(x,y,vel.x*0.3f+(rand.nextFloat()-0.5f), vel.y*0.3f+(rand.nextFloat()-0.5f), color, Particle.PARTICLE_SIZE, entities, noFade));
+        return particles;
     }
 
     //Returns the entities to remove

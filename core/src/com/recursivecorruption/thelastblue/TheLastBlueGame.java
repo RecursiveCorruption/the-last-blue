@@ -64,6 +64,7 @@ public class TheLastBlueGame implements ApplicationListener {
         maxRad = 15;
         numEnemies = 0;
         List<Entity> remove = new ArrayList<Entity>();
+        List<Entity> create = new ArrayList<Entity>();
         for (Entity i : entities) {
             maxRad = Math.max(maxRad, (int) i.radius);
             List<Entity> toBeRemoved = i.update();
@@ -74,15 +75,16 @@ public class TheLastBlueGame implements ApplicationListener {
                         player.score += Math.pow(j.radius, 2);
                 } else if (j instanceof Player) {
                     for (Entity k : entities)
-                        i.createParticles(true);
+                        create.addAll(i.createParticles(true));
                     state = State.BEGIN;
                     break;
                 }
-                j.createParticles();
+                create.addAll(j.createParticles());
             }
             remove.addAll(toBeRemoved);
         }
         entities.removeAll(remove);
+        entities.addAll(create);
 
         if (numEnemies < 50 && rand.nextInt(2 + ((100 * 1000) / (1000 + player.score + (int) Math.pow((double) maxRad, 2f)))) == 1) {
             int width = rand.nextInt(Graphics.getSX());

@@ -49,8 +49,8 @@ public class Particle extends Entity{
     }
 
     @Override
-    public void createParticles() { }
+    public List<Entity> createParticles() { return new ArrayList<Entity>();}
 
     @Override
-    public void createParticles(boolean noFade) { }
+    public List<Entity> createParticles(boolean noFade) {return new ArrayList<Entity>();}
 }
