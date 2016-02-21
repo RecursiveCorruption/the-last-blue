@@ -52,15 +52,6 @@ public class TheLastBlueGame implements ApplicationListener {
     }
 
     public void update() {
-        InputProcessor.update();
-        if (state == State.BEGIN) {
-            if (Gdx.input.justTouched()) {
-                state = State.PLAY;
-                reset();
-            }
-            return;
-        }
-
         maxRad = 15;
         numEnemies = 0;
         List<Entity> remove = new ArrayList<Entity>();
@@ -75,7 +66,7 @@ public class TheLastBlueGame implements ApplicationListener {
                         player.score += Math.pow(j.radius, 2);
                 } else if (j instanceof Player) {
                     for (Entity k : entities)
-                        create.addAll(i.createParticles(true));
+                        create.addAll(k.createParticles(true));
                     state = State.BEGIN;
                     break;
                 }
@@ -94,6 +85,15 @@ public class TheLastBlueGame implements ApplicationListener {
             else
                 height = Graphics.getSY() * rand.nextInt(2);
             entities.add(new Enemy(width, height, player, entities));
+        }
+
+        InputProcessor.update();
+        if (state == State.BEGIN) {
+            if (Gdx.input.justTouched()) {
+                state = State.PLAY;
+                reset();
+            }
+            return;
         }
     }
 
