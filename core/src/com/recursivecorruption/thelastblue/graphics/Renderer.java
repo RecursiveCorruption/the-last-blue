@@ -86,6 +86,7 @@ public class Renderer
 
     public Renderer(OrthographicCamera cam)
     {
+        this.cam = cam;
         batch = new SpriteBatch();
         shapeRenderer = new ShapeRenderer();
         shapeRenderer.setProjectionMatrix(cam.combined);
@@ -108,8 +109,8 @@ public class Renderer
 
     public void begin(boolean shape)
     {
-        if (shape)
-            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+       if (shape)
+            return;//shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         else
             batch.begin();
     }
@@ -119,25 +120,27 @@ public class Renderer
         if (batch.isDrawing())
             batch.end();
         else
-            shapeRenderer.end();
+            flush();
+        //    shapeRenderer.end();
     }
 
     public void resize(OrthographicCamera cam)
     {
         batch.setProjectionMatrix(cam.combined);
-        shapeRenderer.setProjectionMatrix(cam.combined);
+        //shapeRenderer.setProjectionMatrix(cam.combined);
     }
 
     public void square(Color color, Vector2 pos, float radius)
     {
-        shapeRenderer.setColor(color);
-        shapeRenderer.rect(pos.x, pos.y, radius, radius);
+        //shapeRenderer.setColor(color);
+        //shapeRenderer.rect(pos.x, pos.y, radius, radius);
+        render(pos.x,pos.y,pos.x+radius,pos.y,pos.x+radius,pos.y+radius,pos.x,pos.y+radius,color);
     }
 
     public void circle(Color color, Vector2 pos, float radius)
     {
-        shapeRenderer.setColor(Color.GRAY);
-        shapeRenderer.circle(pos.x,pos.y, 20f);
+        //shapeRenderer.setColor(Color.GRAY);
+        //shapeRenderer.circle(pos.x,pos.y, 20f);
     }
 
     /*1 --- 2
@@ -152,7 +155,7 @@ public class Renderer
         //drawTriangle(p1x,p1y,p3x,p3y,p4x,p4y,color);
 
         //this will render the triangles to GL
-        flush();
+        //flush();
     }
 
     void flush()
@@ -175,7 +178,7 @@ public class Renderer
         int vertexCount = (idx / NUM_COMPONENTS);
 
         //update the camera with our Y-up coordiantes
-        cam.setToOrtho(false, Graphics.getSX(), Graphics.getSY());
+        cam.setToOrtho(true, Graphics.getSX(), Graphics.getSY());
 
         //start the shader before setting any uniforms
         shader.begin();

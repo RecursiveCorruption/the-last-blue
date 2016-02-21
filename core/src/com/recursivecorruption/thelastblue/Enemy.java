@@ -16,29 +16,15 @@ public class Enemy extends Entity
     public static float EXPLODE_SIZE = 65f;
     private static float EXPLODE_AREA = (float)Math.pow(EXPLODE_SIZE,2);
     private double angle = -200.25f;
-    private Random rand;
+    Player player;
 
-    public Enemy(float x, float y)
+    public Enemy(float x, float y, Player player, List<Entity> entities)
     {
-        super(Color.BLUE,15f,x,y,0,0);
+        super(Color.BLUE,15f,x,y,0,0, entities);
+        this.player = player;
         recalcColor();
         recalcSpeed();
         rand = new Random();
-    }
-
-    public void createParticles(List<Particle> particles)
-    {
-        createParticles(particles,false);
-    }
-
-    public void createParticles(List<Particle> particles, boolean noFade)
-    {
-        float vx = (float)(speed *Math.cos(angle));
-        float vy = (float)(speed *Math.sin(angle));
-
-        for (float x = pos.x; x <= pos.x+radius;x+= Particle.PARTICLE_SIZE)
-            for (float y = pos.y; y <= pos.y+radius;y+= Particle.PARTICLE_SIZE)
-                particles.add(new Particle(x,y,vx*0.3f+(rand.nextFloat()-0.5f), vy*0.3f+(rand.nextFloat()-0.5f), color, Particle.PARTICLE_SIZE, noFade));
     }
 
     private void recalcColor()
@@ -51,25 +37,30 @@ public class Enemy extends Entity
         speed = 5f;//(float)(50.0 - 50.0*EXPLODE_AREA/((EXPLODE_AREA-Math.min(Math.pow((double)radius,2.0),EXPLODE_AREA-1.0))));
     }
 
-    public boolean update(Entity player, List<Enemy> peers, List<Particle> particles)
+    @Override
+    public List<Entity> update()
     {
-        List<Enemy> remove = new ArrayList<Enemy>();
-        for (Enemy i:peers)
+        vel.set((float)(speed *Math.cos(angle)), (float)(speed *Math.sin(angle)));
+        List<Entity> remove = new ArrayList<Entity>();
+        for (Entity i:entities)
         {
-            if (this==i)
+            if (this==i || !(i instanceof Enemy))
                 continue;
             if (collides(i))
             {
                 if (true || i.radius==radius) {
+                    Entity toDie, toLive;
                     if (radius < i.radius) {
-                        createParticles(particles);
-                        pos = i.pos;
-                    } else
-                        i.createParticles(particles);
-                    radius = (int) Math.sqrt(Math.pow((double) radius, 2) + Math.pow((double) i.radius, 2));
-                    recalcColor();
-                    recalcSpeed();
-                    remove.add(i);
+                        toDie = this;
+                        toLive = i;
+                    } else {
+                        toDie = i;
+                        toLive = this;
+                    }
+                    remove.add(toDie);
+                    toLive.radius = (int) Math.sqrt(Math.pow((double) toLive.radius, 2) + Math.pow((double) toDie.radius, 2));
+                    ((Enemy)toLive).recalcColor();
+                    ((Enemy)toLive).recalcSpeed();
                 }
                 else {
                     float dX = (pos.x+radius)/2f-(radius+i.pos.x)/2;
@@ -100,10 +91,6 @@ public class Enemy extends Entity
                 angle += 2*Math.PI ;
         }
         pos.add((float)(speed *Math.cos(angle)), (float)(speed *Math.sin(angle)));
-        if (remove.size()>0) {
-            peers.removeAll(remove);
-            return true;
-        }
-        return false;
+        return remove;
     }
 }

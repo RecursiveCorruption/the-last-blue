@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.recursivecorruption.thelastblue.graphics.Graphics;
 import com.recursivecorruption.thelastblue.graphics.Renderer;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -25,12 +26,12 @@ public class Player extends Entity{
     {
         for (float x = pos.x; x <= pos.x+ radius;x+=Particle.PARTICLE_SIZE)
             for (float y = pos.y; y <= pos.y+ radius;y+=Particle.PARTICLE_SIZE)
-                particles.add(new Particle(x,y,Gdx.graphics.getDeltaTime()*vel.x*0.3f+(rand.nextFloat()-0.5f), Gdx.graphics.getDeltaTime()*vel.y*0.3f+(rand.nextFloat()-0.5f), color, Particle.PARTICLE_SIZE, noFade));
+                particles.add(new Particle(x,y,Gdx.graphics.getDeltaTime()*vel.x*0.3f+(rand.nextFloat()-0.5f), Gdx.graphics.getDeltaTime()*vel.y*0.3f+(rand.nextFloat()-0.5f), color, Particle.PARTICLE_SIZE, entities, noFade));
     }
 
-    public Player(float x, float y)
+    public Player(float x, float y, List<Entity> entities)
     {
-        super(Color.FIREBRICK, 30,x,y,0,0);
+        super(Color.FIREBRICK, 30,x,y,0,0, entities);
         rand = new Random();
     }
 
@@ -39,7 +40,8 @@ public class Player extends Entity{
         return 30f;//100f*(1f-Math.max(0f,Math.min(1f,Math.max(0,Math.abs(velo)-500)/1500)));
     }
 
-    public boolean update(List<Enemy> enemies)
+    @Override
+    public List<Entity> update()
     {
         float cap = 4000f* Graphics.getScaleConstant(), accel = 40f, mult = 1f;
         if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
@@ -74,10 +76,13 @@ public class Player extends Entity{
             vel.x = 0;
         if (oldY != pos.y)
             vel.y = 0;
-        for (Enemy i:enemies)
-            if (collides(i))
-                return true;
-        return false;
+        List<Entity> list = new ArrayList<Entity>();
+        for (Entity i:entities)
+            if (i instanceof Enemy && collides(i)) {
+                list.add(this);
+                break;
+            }
+        return list;
     }
 
 }
