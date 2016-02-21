@@ -152,7 +152,7 @@ public class Renderer
     {
         //this will push the triangles into the batch
         drawTriangle(p1x,p1y,p2x,p2y,p3x,p3y,color);
-        //drawTriangle(p1x,p1y,p3x,p3y,p4x,p4y,color);
+        drawTriangle(p1x,p1y,p3x,p3y,p4x,p4y,color);
 
         //this will render the triangles to GL
         //flush();
