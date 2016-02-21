@@ -1,5 +1,6 @@
 package com.recursivecorruption.thelastblue;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import com.badlogic.gdx.graphics.Color;
@@ -34,7 +35,7 @@ public class Enemy extends Entity
 
     private void recalcSpeed()
     {
-        speed = 5f;//(float)(50.0 - 50.0*EXPLODE_AREA/((EXPLODE_AREA-Math.min(Math.pow((double)radius,2.0),EXPLODE_AREA-1.0))));
+        speed = 300f;//(float)(50.0 - 50.0*EXPLODE_AREA/((EXPLODE_AREA-Math.min(Math.pow((double)radius,2.0),EXPLODE_AREA-1.0))));
     }
 
     @Override
@@ -90,7 +91,7 @@ public class Enemy extends Entity
             else if (angle<-Math.PI)
                 angle += 2*Math.PI ;
         }
-        pos.add((float)(speed *Math.cos(angle)), (float)(speed *Math.sin(angle)));
+        pos.add(Gdx.graphics.getDeltaTime()*(float)(speed *Math.cos(angle)), Gdx.graphics.getDeltaTime()*(float)(speed *Math.sin(angle)));
         return remove;
     }
 }

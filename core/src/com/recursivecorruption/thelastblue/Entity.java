@@ -42,7 +42,7 @@ public abstract class Entity {
         List<Entity> particles = new ArrayList<Entity>();
         for (float x = pos.x; x <= pos.x+radius;x+= Particle.PARTICLE_SIZE)
             for (float y = pos.y; y <= pos.y+radius;y+= Particle.PARTICLE_SIZE)
-                particles.add(new Particle(x,y,vel.x*0.3f+(rand.nextFloat()-0.5f), vel.y*0.3f+(rand.nextFloat()-0.5f), color, Particle.PARTICLE_SIZE, entities, noFade));
+                particles.add(new Particle(x,y,vel.x*0.3f+60f*(rand.nextFloat()-0.5f), vel.y*0.3f+60f*(rand.nextFloat()-0.5f), color, Particle.PARTICLE_SIZE, entities, noFade));
         return particles;
     }
 

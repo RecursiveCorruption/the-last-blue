@@ -1,5 +1,6 @@
 package com.recursivecorruption.thelastblue;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
@@ -31,7 +32,7 @@ public class Particle extends Entity{
     public List<Entity> update()
     {
         color.a = (float)life/(float)FULL_LIFE;
-        pos.add(vel);
+        pos.add(vel.cpy().scl(Gdx.graphics.getDeltaTime()));
         List<Entity> list = new ArrayList<Entity>();
         if (noFade) {
             if (pos.x> Graphics.getSX())
