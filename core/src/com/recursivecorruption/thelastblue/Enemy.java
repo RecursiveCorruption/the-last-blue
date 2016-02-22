@@ -44,7 +44,7 @@ public class Enemy extends Entity
         vel.set((float)(speed *Math.cos(angle)), (float)(speed *Math.sin(angle)));
         List<Entity> remove = new ArrayList<Entity>();
         if (radius > Enemy.EXPLODE_SIZE) {
-            player.score += Math.pow(radius, 2);
+            TheLastBlueGame.addScore((int)Math.pow(radius, 2));
             remove.add(this);
         }
         for (Entity i:entities)

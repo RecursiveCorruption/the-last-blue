@@ -21,9 +21,16 @@ public class TheLastBlueGame implements ApplicationListener {
     private Random rand;
     private Player player;
     private int maxRad;
-    private State state = State.BEGIN;
+    private static State state = State.BEGIN;
     private Renderer renderer;
     private int numEnemies;
+    private static int score = 0;
+
+    public static void addScore(int amount)
+    {
+        if (state==State.PLAY)
+            score += amount;
+    }
 
     private enum State {
         BEGIN,
@@ -49,21 +56,25 @@ public class TheLastBlueGame implements ApplicationListener {
         entities = new ArrayList<Entity>();
         player = new Player(Graphics.getSX() / 2f, Graphics.getSY() / 2f, entities);
         entities.add(player);
+        score = 0;
     }
 
     public void update() {
         maxRad = 15;
         numEnemies = 0;
+        boolean justDied = false;
         List<Entity> remove = new ArrayList<Entity>();
         List<Entity> create = new ArrayList<Entity>();
         for (Entity i : entities) {
-            maxRad = Math.max(maxRad, (int) i.radius);
+            if (i instanceof Enemy)
+                maxRad = Math.max(maxRad, (int) i.radius);
             List<Entity> toBeRemoved = i.update();
             for (Entity j : toBeRemoved) {
                 if (j instanceof Enemy) {
                     ++numEnemies;
                 } else if (j instanceof Player) {
                     state = State.BEGIN;
+                    justDied = true;
                 }
                 create.addAll(j.createParticles());
             }
@@ -71,8 +82,10 @@ public class TheLastBlueGame implements ApplicationListener {
         }
         entities.removeAll(remove);
         entities.addAll(create);
+        if (justDied)
+            score += (int) Math.pow((double) (maxRad - 15f), 2f);
 
-        if (numEnemies < 50 && rand.nextInt(2 + ((100 * 1000) / (1000 + player.score + (int) Math.pow((double) maxRad, 2f)))) == 1) {
+        if (numEnemies < 50 && rand.nextInt(2 + ((100 * 1000) / (1000 + score + (int) Math.pow((double) maxRad, 2f)))) == 1) {
             int width = rand.nextInt(Graphics.getSX());
             int height = rand.nextInt(Graphics.getSY());
             if (rand.nextInt(2) == 1)
@@ -107,7 +120,7 @@ public class TheLastBlueGame implements ApplicationListener {
             i.draw(renderer);
         renderer.end();
         renderer.begin(false);
-        renderer.printCentered((int) (0.8f * Graphics.getSY()), Integer.toString(player.score + (int) Math.pow((double) (maxRad - 15f), 2f)));
+        renderer.printCentered((int) (0.8f * Graphics.getSY()), Integer.toString(score + (state == State.PLAY ? (int) Math.pow((double) (maxRad - 15f), 2f) : 0)));
         if (state != State.PLAY) {
             renderer.printCentered((int) (0.4f * Graphics.getSY()), "Avoid the blue boxes");
             renderer.printCentered((int) (0.6f * Graphics.getSY()), "Tap to begin");
