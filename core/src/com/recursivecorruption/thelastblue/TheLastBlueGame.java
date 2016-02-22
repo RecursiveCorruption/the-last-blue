@@ -62,13 +62,8 @@ public class TheLastBlueGame implements ApplicationListener {
             for (Entity j : toBeRemoved) {
                 if (j instanceof Enemy) {
                     ++numEnemies;
-                    if (j.radius > Enemy.EXPLODE_SIZE)
-                        player.score += Math.pow(j.radius, 2);
                 } else if (j instanceof Player) {
-                    for (Entity k : entities)
-                        create.addAll(k.createParticles(true));
                     state = State.BEGIN;
-                    break;
                 }
                 create.addAll(j.createParticles());
             }
