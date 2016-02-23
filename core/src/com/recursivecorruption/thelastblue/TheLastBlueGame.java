@@ -60,6 +60,7 @@ public class TheLastBlueGame implements ApplicationListener {
     }
 
     public void update() {
+        InputProcessor.update();
         maxRad = 15;
         numEnemies = 0;
         boolean justDied = false;
@@ -95,7 +96,6 @@ public class TheLastBlueGame implements ApplicationListener {
             entities.add(new Enemy(width, height, player, entities));
         }
 
-        InputProcessor.update();
         if (state == State.BEGIN) {
             if (Gdx.input.justTouched()) {
                 state = State.PLAY;

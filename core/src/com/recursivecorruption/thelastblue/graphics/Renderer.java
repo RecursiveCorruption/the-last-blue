@@ -110,7 +110,7 @@ public class Renderer
     public void begin(boolean shape)
     {
        if (shape)
-            return;//shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         else
             batch.begin();
     }
@@ -120,27 +120,27 @@ public class Renderer
         if (batch.isDrawing())
             batch.end();
         else
-            flush();
-        //    shapeRenderer.end();
+        //    flush();
+            shapeRenderer.end();
     }
 
     public void resize(OrthographicCamera cam)
     {
         batch.setProjectionMatrix(cam.combined);
-        //shapeRenderer.setProjectionMatrix(cam.combined);
+        shapeRenderer.setProjectionMatrix(cam.combined);
     }
 
     public void square(Color color, Vector2 pos, float radius)
     {
-        //shapeRenderer.setColor(color);
-        //shapeRenderer.rect(pos.x, pos.y, radius, radius);
-        render(pos.x,pos.y,pos.x+radius,pos.y,pos.x+radius,pos.y+radius,pos.x,pos.y+radius,color);
+        shapeRenderer.setColor(color);
+        shapeRenderer.rect(pos.x, pos.y, radius, radius);
+        //render(pos.x,pos.y,pos.x+radius,pos.y,pos.x+radius,pos.y+radius,pos.x,pos.y+radius,color);
     }
 
     public void circle(Color color, Vector2 pos, float radius)
     {
-        //shapeRenderer.setColor(Color.GRAY);
-        //shapeRenderer.circle(pos.x,pos.y, 20f);
+        shapeRenderer.setColor(Color.GRAY);
+        shapeRenderer.circle(pos.x,pos.y, 20f);
     }
 
     /*1 --- 2
