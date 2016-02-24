@@ -73,20 +73,25 @@ public class Renderer
     {
         this.cam = cam;
         batch = new SpriteBatch();
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("MontereyFLF.ttf"));
+        batch.setProjectionMatrix(cam.combined);
+        shader = createMeshShader();
+        rectangles = new ArrayList<Rect>();
+        initializeFont();
+    }
+
+    private void initializeFont()
+    {
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = (int)(70f/Gdx.graphics.getDensity());
         parameter.characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.!'()>?: ";
         parameter.flip = true;
         font = new BitmapFont();
         font.setColor(Color.WHITE);
+
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("MontereyFLF.ttf"));
         font = generator.generateFont(parameter);
         generator.dispose();
-        batch.setProjectionMatrix(cam.combined);
-        shader = createMeshShader();
-        rectangles = new ArrayList<Rect>();
     }
-
 
     private void createFromList() {
         int numRects = rectangles.size();
