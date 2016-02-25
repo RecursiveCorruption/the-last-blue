@@ -19,9 +19,9 @@ public class Enemy extends Entity
     private double angle = -200.25f;
     Player player;
 
-    public Enemy(float x, float y, Player player, List<Entity> entities)
+    public Enemy(float x, float y, Player player)
     {
-        super(Color.BLUE,15f,x,y,0,0, entities);
+        super(new Color(0.1f,1f,1f,1f),15f,x,y,0,0);
         this.player = player;
         recalcColor();
         recalcSpeed();
@@ -30,7 +30,7 @@ public class Enemy extends Entity
 
     private void recalcColor()
     {
-        color = new Color(radius/EXPLODE_SIZE, 0.1f,1-radius/EXPLODE_SIZE,1f);
+        color = new Color(radius/EXPLODE_SIZE, 0.2f,1-radius/EXPLODE_SIZE,1f);
     }
 
     private void recalcSpeed()
@@ -39,13 +39,12 @@ public class Enemy extends Entity
     }
 
     @Override
-    public List<Entity> update()
+    public Entity update(List<Entity> entities)
     {
         vel.set((float)(speed *Math.cos(angle)), (float)(speed *Math.sin(angle)));
-        List<Entity> remove = new ArrayList<Entity>();
         if (radius > Enemy.EXPLODE_SIZE) {
             TheLastBlueGame.addScore((int)Math.pow(radius, 2));
-            remove.add(this);
+            return this;
         }
         for (Entity i:entities)
         {
@@ -62,10 +61,10 @@ public class Enemy extends Entity
                         toDie = i;
                         toLive = this;
                     }
-                    remove.add(toDie);
                     toLive.radius = (int) Math.sqrt(Math.pow((double) toLive.radius, 2) + Math.pow((double) toDie.radius, 2));
                     ((Enemy)toLive).recalcColor();
                     ((Enemy)toLive).recalcSpeed();
+                    return toDie;
                 }
                 else {
                     float dX = (pos.x+radius)/2f-(radius+i.pos.x)/2;
@@ -96,6 +95,6 @@ public class Enemy extends Entity
                 angle += 2*Math.PI ;
         }
         pos.add(Gdx.graphics.getDeltaTime()*(float)(speed *Math.cos(angle)), Gdx.graphics.getDeltaTime()*(float)(speed *Math.sin(angle)));
-        return remove;
+        return null;
     }
 }

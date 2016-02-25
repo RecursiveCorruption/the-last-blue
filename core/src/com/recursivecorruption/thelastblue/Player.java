@@ -26,12 +26,12 @@ public class Player extends Entity{
     {
         for (float x = pos.x; x <= pos.x+ radius;x+=Particle.PARTICLE_SIZE)
             for (float y = pos.y; y <= pos.y+ radius;y+=Particle.PARTICLE_SIZE)
-                particles.add(new Particle(x,y,Gdx.graphics.getDeltaTime()*vel.x*0.3f+(rand.nextFloat()-0.5f), Gdx.graphics.getDeltaTime()*vel.y*0.3f+(rand.nextFloat()-0.5f), color, Particle.PARTICLE_SIZE, entities, noFade));
+                particles.add(new Particle(x,y,Gdx.graphics.getDeltaTime()*vel.x*0.3f+(rand.nextFloat()-0.5f), Gdx.graphics.getDeltaTime()*vel.y*0.3f+(rand.nextFloat()-0.5f), color, Particle.PARTICLE_SIZE, noFade));
     }
 
-    public Player(float x, float y, List<Entity> entities)
+    public Player(float x, float y)
     {
-        super(Color.FIREBRICK, 30,x,y,0,0, entities);
+        super(new Color(1f,0.1f,0.1f,1f), 30,x,y,0,0);
         rand = new Random();
     }
 
@@ -41,7 +41,7 @@ public class Player extends Entity{
     }
 
     @Override
-    public List<Entity> update()
+    public Entity update(List<Entity> entities)
     {
         float cap = 4000f* Graphics.getScaleConstant(), accel = 40f, mult = 1f;
         if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
@@ -76,13 +76,10 @@ public class Player extends Entity{
             vel.x = 0;
         if (oldY != pos.y)
             vel.y = 0;
-        List<Entity> list = new ArrayList<Entity>();
         for (Entity i:entities)
-            if (i instanceof Enemy && collides(i)) {
-                list.add(this);
-                break;
-            }
-        return list;
+            if (i instanceof Enemy && collides(i))
+                return this;
+        return null;
     }
 
 }

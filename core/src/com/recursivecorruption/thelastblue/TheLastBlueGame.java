@@ -54,7 +54,7 @@ public class TheLastBlueGame implements ApplicationListener {
 
     private void reset() {
         entities = new ArrayList<Entity>();
-        player = new Player(Graphics.getSX() / 2f, Graphics.getSY() / 2f, entities);
+        player = new Player(Graphics.getSX() / 2f, Graphics.getSY() / 2f);
         entities.add(player);
         score = 0;
     }
@@ -69,17 +69,17 @@ public class TheLastBlueGame implements ApplicationListener {
         for (Entity i : entities) {
             if (i instanceof Enemy)
                 maxRad = Math.max(maxRad, (int) i.radius);
-            List<Entity> toBeRemoved = i.update();
-            for (Entity j : toBeRemoved) {
-                if (j instanceof Enemy) {
-                    ++numEnemies;
-                } else if (j instanceof Player) {
-                    state = State.BEGIN;
-                    justDied = true;
-                }
-                create.addAll(j.createParticles());
+            Entity j = i.update(entities);
+            if (j instanceof Enemy) {
+                ++numEnemies;
+            } else if (j instanceof Player) {
+                state = State.BEGIN;
+                justDied = true;
             }
-            remove.addAll(toBeRemoved);
+            if (j!=null) {
+                create.addAll(j.createParticles());
+                remove.add(j);
+            }
         }
         entities.removeAll(remove);
         entities.addAll(create);
@@ -93,7 +93,7 @@ public class TheLastBlueGame implements ApplicationListener {
                 width = Graphics.getSX() * rand.nextInt(2);
             else
                 height = Graphics.getSY() * rand.nextInt(2);
-            entities.add(new Enemy(width, height, player, entities));
+            entities.add(new Enemy(width, height, player));
         }
 
         if (state == State.BEGIN) {
