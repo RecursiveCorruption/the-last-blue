@@ -1,6 +1,5 @@
 package com.recursivecorruption.thelastblue;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
@@ -17,7 +16,6 @@ import java.util.Random;
 public class TheLastBlueGame implements ApplicationListener {
     private OrthographicCamera cam;
     private List<Entity> entities;
-    private BitmapFont font;
     private Random rand;
     private Player player;
     private int maxRad;
@@ -49,7 +47,7 @@ public class TheLastBlueGame implements ApplicationListener {
     @Override
     public void resize(int width, int height) {
         cam.setToOrtho(true, Graphics.getSX(), Graphics.getSY());
-        renderer.resize(cam);
+        renderer.resize(width, height);
     }
 
     private void reset() {
@@ -101,7 +99,6 @@ public class TheLastBlueGame implements ApplicationListener {
                 state = State.PLAY;
                 reset();
             }
-            return;
         }
     }
 
@@ -118,7 +115,7 @@ public class TheLastBlueGame implements ApplicationListener {
         for (Entity i : entities)
             i.draw(renderer);
         renderer.generateSquares();
-        renderer.renderSquares();
+        renderer.render();
         renderer.beginText();
         renderer.printCentered((int) (0.8f * Graphics.getSY()), Integer.toString(score + (state == State.PLAY ? (int) Math.pow((double) (maxRad - 15f), 2f) : 0)));
         if (state != State.PLAY) {
@@ -141,5 +138,6 @@ public class TheLastBlueGame implements ApplicationListener {
 
     @Override
     public void dispose() {
+        renderer.dispose();
     }
 }

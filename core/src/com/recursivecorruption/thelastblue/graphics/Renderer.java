@@ -18,7 +18,6 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class Renderer
 {
@@ -69,26 +68,33 @@ public class Renderer
     private final int VALS_PER_VERT = VERT_POS_VALS + VERT_COLOR_VALS;
     private final int VALS_PER_INDICE = 6, VERTS_PER_RECT = 4;
 
+    private boolean useShapeRenderer = false;
+    private ShapeRenderer shapeRenderer;
+
     public Renderer(OrthographicCamera cam)
     {
         this.cam = cam;
+        if (useShapeRenderer)
+            shapeRenderer = new ShapeRenderer();
+        else
+            shader = createMeshShader();
         batch = new SpriteBatch();
         batch.setProjectionMatrix(cam.combined);
-        shader = createMeshShader();
         rectangles = new ArrayList<Rect>();
-        initializeFont();
+        font = new BitmapFont();
+        updateFont(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     }
 
-    private void initializeFont()
+    private void updateFont(int width, int height)
     {
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = (int)(70f/Gdx.graphics.getDensity());
+        parameter.size = (int)(70f*Gdx.graphics.getDensity());
+        parameter.size = (int)Math.min(Graphics.getSX() / 10f, Graphics.getSY()/6f);//(Gdx.graphics.getDensity()*160f);
         parameter.characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.!'()>?: ";
         parameter.flip = true;
-        font = new BitmapFont();
         font.setColor(Color.WHITE);
-
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("MontereyFLF.ttf"));
+        font.dispose();
         font = generator.generateFont(parameter);
         generator.dispose();
     }
@@ -101,30 +107,43 @@ public class Renderer
 
         short[] indices = new short[numRects*VALS_PER_INDICE];
         float[] verts = new float[numVerts * VALS_PER_VERT];
+        if (useShapeRenderer) {
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+            shapeRenderer.setProjectionMatrix(cam.combined);
+        }
 
         for (int i = 0; i < numRects; i++) {
 
             Rect rect = rectangles.get(i);
-            int offset = i * VALS_PER_VERT * VERTS_PER_RECT;
-            setValues(offset, 0, verts, rect.color, rect.pos.x, rect.pos.y);
-            setValues(offset, 1, verts, rect.color, rect.pos.x + rect.sideLength, rect.pos.y);
-            setValues(offset, 2, verts, rect.color, rect.pos.x + rect.sideLength, rect.pos.y + rect.sideLength);
-            setValues(offset, 3, verts, rect.color, rect.pos.x, rect.pos.y + rect.sideLength);
+            if (useShapeRenderer) {
+                shapeRenderer.setColor(rect.color);
+                shapeRenderer.rect(rect.pos.x, rect.pos.y, rect.sideLength, rect.sideLength);
+            } else {
+                int offset = i * VALS_PER_VERT * VERTS_PER_RECT;
+                setValues(offset, 0, verts, rect.color, rect.pos.x, rect.pos.y);
+                setValues(offset, 1, verts, rect.color, rect.pos.x + rect.sideLength, rect.pos.y);
+                setValues(offset, 2, verts, rect.color, rect.pos.x + rect.sideLength, rect.pos.y + rect.sideLength);
+                setValues(offset, 3, verts, rect.color, rect.pos.x, rect.pos.y + rect.sideLength);
 
-            indices[i*6+0] = (short) (i*4+0);
-            indices[i*6+1] = (short) (i*4+1);
-            indices[i*6+2] = (short) (i*4+2);
-            indices[i*6+3] = (short) (i*4+2);
-            indices[i*6+4] = (short) (i*4+3);
-            indices[i*6+5] = (short) (i*4+0);
+                indices[i * 6] = (short) (i * 4);
+                indices[i * 6 + 1] = (short) (i * 4 + 1);
+                indices[i * 6 + 2] = (short) (i * 4 + 2);
+                indices[i * 6 + 3] = (short) (i * 4 + 2);
+                indices[i * 6 + 4] = (short) (i * 4 + 3);
+                indices[i * 6 + 5] = (short) (i * 4);
+            }
         }
-        mesh.setVertices(verts);
-        mesh.setIndices(indices);
+        if (useShapeRenderer) {
+            shapeRenderer.end();
+        } else {
+            mesh.setVertices(verts);
+            mesh.setIndices(indices);
+        }
     }
 
     private void setValues(int rectOffset, int vertNum, float[] verts, Color color, float x, float y) {
         int offset = rectOffset + vertNum * VALS_PER_VERT;
-        verts[offset + 0] = x;
+        verts[offset] = x;
         verts[offset + 1] = y;
         verts[offset + 2] = 0; //z-pos
         verts[offset + 3] = color.r;
@@ -155,9 +174,9 @@ public class Renderer
         batch.end();
     }
 
-    public void resize(OrthographicCamera cam)
+    public void resize(int width, int height)
     {
-        batch.setProjectionMatrix(cam.combined);
+        updateFont(width, height);
     }
 
     public void square(Color color, Vector2 pos, float radius)
@@ -176,8 +195,11 @@ public class Renderer
         rectangles.clear();
     }
 
-    public void renderSquares()
+    public void render()
     {
+        batch.setProjectionMatrix(cam.combined);
+        if (useShapeRenderer)
+            return;
         shader.begin();
         shader.setUniformMatrix("u_projTrans", cam.combined);
         mesh.render(shader, GL20.GL_TRIANGLES);
@@ -189,6 +211,7 @@ public class Renderer
         mesh.dispose();
         shader.dispose();
         batch.dispose();
+        font.dispose();
     }
 
     public void printCentered(int y, String message)
