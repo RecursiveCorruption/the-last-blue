@@ -17,7 +17,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class Renderer
 {
@@ -57,7 +56,6 @@ public class Renderer
 
     private BitmapFont font;
     private Batch batch;
-    private List<Rect> rectangles;
 
     private Mesh mesh;
     private OrthographicCamera cam;
@@ -67,6 +65,15 @@ public class Renderer
     private final int VERT_COLOR_VALS = 4; //r,b,g,a
     private final int VALS_PER_VERT = VERT_POS_VALS + VERT_COLOR_VALS;
     private final int VALS_PER_INDICE = 6, VERTS_PER_RECT = 4;
+
+    private final int MAX_RECTS = 10000;
+
+    int numVerts = VERTS_PER_RECT * MAX_RECTS;
+
+    short[] indices = new short[MAX_RECTS *VALS_PER_INDICE];
+    float[] verts = new float[numVerts * VALS_PER_VERT];
+    Rect[] rectangles = new Rect[MAX_RECTS];
+    int nextRectID = 0, prevNumRects = 0;
 
     private boolean useShapeRenderer = false;
     private ShapeRenderer shapeRenderer;
@@ -80,9 +87,11 @@ public class Renderer
             shader = createMeshShader();
         batch = new SpriteBatch();
         batch.setProjectionMatrix(cam.combined);
-        rectangles = new ArrayList<Rect>();
         font = new BitmapFont();
+        mesh = new Mesh(true, numVerts, MAX_RECTS *VALS_PER_INDICE, VertexAttribute.Position(), VertexAttribute.ColorUnpacked());
         updateFont(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        mesh.setVertices(verts);
+        mesh.setIndices(indices);
     }
 
     private void updateFont(int width, int height)
@@ -100,21 +109,14 @@ public class Renderer
     }
 
     private void createFromList() {
-        int numRects = rectangles.size();
-
-        int numVerts = VERTS_PER_RECT * numRects;
-        mesh = new Mesh(true, numVerts, numRects*VALS_PER_INDICE, VertexAttribute.Position(), VertexAttribute.ColorUnpacked());
-
-        short[] indices = new short[numRects*VALS_PER_INDICE];
-        float[] verts = new float[numVerts * VALS_PER_VERT];
         if (useShapeRenderer) {
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
             shapeRenderer.setProjectionMatrix(cam.combined);
         }
+        int i;
+        for (i = 0; i < nextRectID; i++) {
 
-        for (int i = 0; i < numRects; i++) {
-
-            Rect rect = rectangles.get(i);
+            Rect rect = rectangles[i];
             if (useShapeRenderer) {
                 shapeRenderer.setColor(rect.color);
                 shapeRenderer.rect(rect.pos.x, rect.pos.y, rect.sideLength, rect.sideLength);
@@ -133,12 +135,22 @@ public class Renderer
                 indices[i * 6 + 5] = (short) (i * 4);
             }
         }
+        for (;i<prevNumRects;++i)
+        {
+            int offset = i * VALS_PER_VERT * VERTS_PER_RECT;
+            for (int j=0;j<4;++j)
+                setValues(offset, j, verts, Color.BLACK, 0,0);
+            for (int j=0;j<6;++j)
+               indices[i * 6+j]=0;
+        }
         if (useShapeRenderer) {
             shapeRenderer.end();
         } else {
             mesh.setVertices(verts);
             mesh.setIndices(indices);
         }
+        prevNumRects = nextRectID;
+        nextRectID = 0;
     }
 
     private void setValues(int rectOffset, int vertNum, float[] verts, Color color, float x, float y) {
@@ -181,7 +193,9 @@ public class Renderer
 
     public void square(Color color, Vector2 pos, float radius)
     {
-        rectangles.add(new Rect(color, pos, (int) (radius)));
+        if (nextRectID>MAX_RECTS)
+            return;
+        rectangles[nextRectID++] = new Rect(color, pos, (int) (radius));
     }
 
     public void circle(Color color, Vector2 pos, float radius)
@@ -192,7 +206,6 @@ public class Renderer
     public void generateSquares()
     {
         createFromList();
-        rectangles.clear();
     }
 
     public void render()
