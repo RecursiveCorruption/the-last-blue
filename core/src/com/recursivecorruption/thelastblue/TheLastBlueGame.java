@@ -1,7 +1,6 @@
 package com.recursivecorruption.thelastblue;
 
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
@@ -24,12 +23,29 @@ public class TheLastBlueGame implements ApplicationListener {
     private Renderer renderer;
     private int numEnemies;
     private static int score = 0;
-    private Music bgMusic;
+    private Music playMusic, beginMusic;
 
     public static void addScore(int amount)
     {
         if (state==State.PLAY)
             score += amount;
+    }
+
+    private static void increaseVolume(Music music)
+    {
+        if (music.getVolume() < 0.999f) {
+            if (!music.isPlaying())
+                music.play();
+            music.setVolume(music.getVolume() + 0.01f);
+        }
+    }
+
+    private static void decreaseVolume(Music music)
+    {
+        if (music.getVolume() > 0.001f)
+            music.setVolume(music.getVolume() - 0.01f);
+        else if (music.isPlaying())
+            music.stop();
     }
 
     private enum State {
@@ -43,8 +59,12 @@ public class TheLastBlueGame implements ApplicationListener {
         cam.setToOrtho(true, Graphics.getSX(), Graphics.getSY());
         rand = new Random();
         renderer = new Renderer(cam);
-        bgMusic = Gdx.audio.newMusic(Gdx.files.internal("Song.wav"));
-        bgMusic.setLooping(true);
+        playMusic = Gdx.audio.newMusic(Gdx.files.internal("Song.wav"));
+        playMusic.setLooping(true);
+        playMusic.setVolume(0f);
+        beginMusic = Gdx.audio.newMusic(Gdx.files.internal("SadBg.wav"));
+        beginMusic.setLooping(true);
+        beginMusic.setVolume(0f);
         reset();
     }
 
@@ -59,9 +79,6 @@ public class TheLastBlueGame implements ApplicationListener {
         player = new Player(Graphics.getSX() / 2f, Graphics.getSY() / 2f);
         entities.add(player);
         score = 0;
-        bgMusic.setVolume(1f);
-        bgMusic.setPosition(0);
-        bgMusic.play();
     }
 
     public void update() {
@@ -102,13 +119,15 @@ public class TheLastBlueGame implements ApplicationListener {
         }
 
         if (state == State.BEGIN) {
-            if (bgMusic.getVolume()>0.001f) {
-                bgMusic.setVolume(bgMusic.getVolume()-0.01f);
-            }
+            decreaseVolume(playMusic);
+            increaseVolume(beginMusic);
             if (Gdx.input.justTouched()) {
                 state = State.PLAY;
                 reset();
             }
+        } else {
+            decreaseVolume(beginMusic);
+            increaseVolume(playMusic);
         }
     }
 
@@ -150,6 +169,6 @@ public class TheLastBlueGame implements ApplicationListener {
     public void dispose() {
 
         renderer.dispose();
-        bgMusic.dispose();
+        playMusic.dispose();
     }
 }
