@@ -57,11 +57,11 @@ public class Renderer
 
     private BitmapFont font;
     private Batch batch;
-    List<Rect> rectangles;
+    private List<Rect> rectangles;
 
-    Mesh mesh;
-    OrthographicCamera cam;
-    ShaderProgram shader;
+    private Mesh mesh;
+    private OrthographicCamera cam;
+    private ShaderProgram shader;
 
     private final int VERT_POS_VALS = 3; //x,y,z
     private final int VERT_COLOR_VALS = 4; //r,b,g,a
