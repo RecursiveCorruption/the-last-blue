@@ -59,13 +59,13 @@ public class TheLastBlueGame implements ApplicationListener {
         cam.setToOrtho(true, Graphics.getSX(), Graphics.getSY());
         rand = new Random();
         renderer = new Renderer(cam);
-        playMusic = Gdx.audio.newMusic(Gdx.files.internal("Song.wav"));
+        playMusic = Gdx.audio.newMusic(Gdx.files.internal("Song.mp3"));
         playMusic.setLooping(true);
         playMusic.setVolume(0f);
-        beginMusic = Gdx.audio.newMusic(Gdx.files.internal("SadBg.wav"));
+        beginMusic = Gdx.audio.newMusic(Gdx.files.internal("SadBg.mp3"));
         beginMusic.setLooping(true);
         beginMusic.setVolume(0f);
-        reset();
+        reset(false);
     }
 
     @Override
@@ -74,10 +74,15 @@ public class TheLastBlueGame implements ApplicationListener {
         renderer.resize(width, height);
     }
 
-    private void reset() {
+    private void reset()
+    {
+        reset(true);
+    }
+    private void reset(boolean addPlayer) {
         entities = new ArrayList<Entity>();
         player = new Player(Graphics.getSX() / 2f, Graphics.getSY() / 2f);
-        entities.add(player);
+        if (addPlayer)
+            entities.add(player);
         score = 0;
     }
 
