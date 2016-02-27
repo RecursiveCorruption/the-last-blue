@@ -1,5 +1,6 @@
 package com.recursivecorruption.thelastblue;
 
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
@@ -23,6 +24,7 @@ public class TheLastBlueGame implements ApplicationListener {
     private Renderer renderer;
     private int numEnemies;
     private static int score = 0;
+    private Music bgMusic;
 
     public static void addScore(int amount)
     {
@@ -41,6 +43,8 @@ public class TheLastBlueGame implements ApplicationListener {
         cam.setToOrtho(true, Graphics.getSX(), Graphics.getSY());
         rand = new Random();
         renderer = new Renderer(cam);
+        bgMusic = Gdx.audio.newMusic(Gdx.files.internal("Song.wav"));
+        bgMusic.setLooping(true);
         reset();
     }
 
@@ -55,6 +59,9 @@ public class TheLastBlueGame implements ApplicationListener {
         player = new Player(Graphics.getSX() / 2f, Graphics.getSY() / 2f);
         entities.add(player);
         score = 0;
+        bgMusic.setVolume(1f);
+        bgMusic.setPosition(0);
+        bgMusic.play();
     }
 
     public void update() {
@@ -95,6 +102,9 @@ public class TheLastBlueGame implements ApplicationListener {
         }
 
         if (state == State.BEGIN) {
+            if (bgMusic.getVolume()>0.001f) {
+                bgMusic.setVolume(bgMusic.getVolume()-0.01f);
+            }
             if (Gdx.input.justTouched()) {
                 state = State.PLAY;
                 reset();
@@ -138,6 +148,8 @@ public class TheLastBlueGame implements ApplicationListener {
 
     @Override
     public void dispose() {
+
         renderer.dispose();
+        bgMusic.dispose();
     }
 }
