@@ -1,5 +1,6 @@
 package com.recursivecorruption.thelastblue;
 
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
@@ -24,6 +25,8 @@ public class TheLastBlueGame implements ApplicationListener {
     private int numEnemies;
     private static int score = 0;
     private Music playMusic, beginMusic;
+    private int highScore = 0;
+    Preferences prefs;
 
     public static void addScore(int amount)
     {
@@ -65,6 +68,8 @@ public class TheLastBlueGame implements ApplicationListener {
         beginMusic = Gdx.audio.newMusic(Gdx.files.internal("SadBg.mp3"));
         beginMusic.setLooping(true);
         beginMusic.setVolume(0f);
+        prefs = Gdx.app.getPreferences("Settings");
+        highScore = prefs.getInteger("highScore",0);
         reset(false);
     }
 
@@ -83,6 +88,8 @@ public class TheLastBlueGame implements ApplicationListener {
         player = new Player(Graphics.getSX() / 2f, Graphics.getSY() / 2f);
         if (addPlayer)
             entities.add(player);
+        if (score>highScore)
+            highScore = score;
         score = 0;
     }
 
@@ -155,6 +162,13 @@ public class TheLastBlueGame implements ApplicationListener {
         if (state != State.PLAY) {
             renderer.printCentered((int) (0.4f * Graphics.getSY()), "Avoid the blue boxes");
             renderer.printCentered((int) (0.6f * Graphics.getSY()), "Tap to begin");
+            if (score>highScore)
+            {
+                renderer.printLeftOf((int)(0.9f*Graphics.getSX()), (int)(0.1f*Graphics.getSY()), "New High Score!", true);
+                renderer.printLeftOf((int) (0.9f * Graphics.getSX()), (int) (0.2f * Graphics.getSY()), "Old:" + highScore, true);
+            }
+            else
+                renderer.printLeftOf((int) (0.9f * Graphics.getSX()), (int) (0.1f * Graphics.getSY()), "High Score:" + highScore, true);
         }
         renderer.endText();
         Gdx.gl.glDisable(GL20.GL_BLEND);
@@ -162,7 +176,6 @@ public class TheLastBlueGame implements ApplicationListener {
 
     @Override
     public void pause() {
-
     }
 
     @Override
@@ -172,7 +185,8 @@ public class TheLastBlueGame implements ApplicationListener {
 
     @Override
     public void dispose() {
-
+        prefs.putInteger("highScore", Math.max(score,highScore));
+        prefs.flush();
         renderer.dispose();
         playMusic.dispose();
     }

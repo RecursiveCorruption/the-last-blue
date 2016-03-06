@@ -16,8 +16,6 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 
-import java.util.ArrayList;
-
 public class Renderer
 {
     class Rect
@@ -54,7 +52,7 @@ public class Renderer
                     "  gl_FragColor = v_color;\n" +
                     "}";
 
-    private BitmapFont font;
+    private BitmapFont largeFont, smallFont;
     private Batch batch;
 
     private Mesh mesh;
@@ -87,7 +85,8 @@ public class Renderer
             shader = createMeshShader();
         batch = new SpriteBatch();
         batch.setProjectionMatrix(cam.combined);
-        font = new BitmapFont();
+        largeFont = new BitmapFont();
+        smallFont = new BitmapFont();
         mesh = new Mesh(true, numVerts, MAX_RECTS *VALS_PER_INDICE, VertexAttribute.Position(), VertexAttribute.ColorUnpacked());
         updateFont(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         mesh.setVertices(verts);
@@ -97,14 +96,17 @@ public class Renderer
     private void updateFont(int width, int height)
     {
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = (int)(70f*Gdx.graphics.getDensity());
-        parameter.size = (int)Math.min(Graphics.getSX() / 10f, Graphics.getSY()/6f);//(Gdx.graphics.getDensity()*160f);
+        parameter.size = (int)Math.min(Graphics.getSX() / 10f, Graphics.getSY()/6f);
         parameter.characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.!'()>?: ";
         parameter.flip = true;
-        font.setColor(Color.WHITE);
+        largeFont.setColor(Color.WHITE);
+        smallFont.setColor(Color.WHITE);
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("MontereyFLF.ttf"));
-        font.dispose();
-        font = generator.generateFont(parameter);
+        largeFont.dispose();
+        smallFont.dispose();
+        largeFont = generator.generateFont(parameter);
+        parameter.size /= 2;
+        smallFont = generator.generateFont(parameter);
         generator.dispose();
     }
 
@@ -224,13 +226,49 @@ public class Renderer
         mesh.dispose();
         shader.dispose();
         batch.dispose();
-        font.dispose();
+        largeFont.dispose();
+        smallFont.dispose();
     }
-
     public void printCentered(int y, String message)
     {
+        printCentered(y, message, false);
+    }
+
+    public void printCentered(int y, String message, boolean small)
+    {
+        BitmapFont font = getFont(small);
         GlyphLayout glyphLayout = new GlyphLayout();
         glyphLayout.setText(font, message);
-        font.draw(batch,glyphLayout, Graphics.getSX()/2f-glyphLayout.width / 2f, y - glyphLayout.height / 2f);
+        font.draw(batch, glyphLayout, Graphics.getSX() / 2f - glyphLayout.width / 2f, y - glyphLayout.height / 2f);
+    }
+
+    private BitmapFont getFont(boolean small) {
+        return small?smallFont:largeFont;
+    }
+
+    public void printLeftOf(int x, int y, String message)
+    {
+        printLeftOf(x, y, message, false);
+    }
+
+    public void printLeftOf(int x, int y, String message, boolean small)
+    {
+        BitmapFont font = getFont(small);
+        GlyphLayout glyphLayout = new GlyphLayout();
+        glyphLayout.setText(font, message);
+        font.draw(batch, glyphLayout, x - glyphLayout.width, y - glyphLayout.height / 2f);
+    }
+
+    public void printRightOf(int x, int y, String message)
+    {
+        printLeftOf(x,y,message, false);
+    }
+
+    public void printRightOf(int x, int y, String message, boolean small)
+    {
+        BitmapFont font = getFont(small);
+        GlyphLayout glyphLayout = new GlyphLayout();
+        glyphLayout.setText(font, message);
+        font.draw(batch, glyphLayout, x, y - glyphLayout.height / 2f);
     }
 }
