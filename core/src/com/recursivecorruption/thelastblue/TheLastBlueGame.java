@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 
 import com.recursivecorruption.thelastblue.graphics.Graphics;
 import com.recursivecorruption.thelastblue.graphics.Renderer;
+import com.sun.corba.se.impl.orbutil.graph.Graph;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -162,13 +163,12 @@ public class TheLastBlueGame implements ApplicationListener {
         if (state != State.PLAY) {
             renderer.printCentered((int) (0.4f * Graphics.getSY()), "Avoid the blue boxes");
             renderer.printCentered((int) (0.6f * Graphics.getSY()), "Tap to begin");
+            int printX = (int)(0.9f*Graphics.getSX());
+            int printY = (int)(0.1f*Graphics.getSX());
             if (score>highScore)
-            {
-                renderer.printLeftOf((int)(0.9f*Graphics.getSX()), (int)(0.1f*Graphics.getSY()), "New High Score!", true);
-                renderer.printLeftOf((int) (0.9f * Graphics.getSX()), (int) (0.2f * Graphics.getSY()), "Old:" + highScore, true);
-            }
+                renderer.printLeftOf(printX, printY, "New High Score!\nOld:" + highScore, true);
             else
-                renderer.printLeftOf((int) (0.9f * Graphics.getSX()), (int) (0.1f * Graphics.getSY()), "High Score:" + highScore, true);
+                renderer.printLeftOf(printX, printY, "High Score:" + highScore, true);
         }
         renderer.endText();
         Gdx.gl.glDisable(GL20.GL_BLEND);
@@ -176,6 +176,8 @@ public class TheLastBlueGame implements ApplicationListener {
 
     @Override
     public void pause() {
+        prefs.putInteger("highScore", Math.max(score,highScore));
+        prefs.flush();
     }
 
     @Override
@@ -185,8 +187,6 @@ public class TheLastBlueGame implements ApplicationListener {
 
     @Override
     public void dispose() {
-        prefs.putInteger("highScore", Math.max(score,highScore));
-        prefs.flush();
         renderer.dispose();
         playMusic.dispose();
     }

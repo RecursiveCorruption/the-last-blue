@@ -256,7 +256,7 @@ public class Renderer
         BitmapFont font = getFont(small);
         GlyphLayout glyphLayout = new GlyphLayout();
         glyphLayout.setText(font, message);
-        font.draw(batch, glyphLayout, x - glyphLayout.width, y - glyphLayout.height / 2f);
+        font.draw(batch, glyphLayout, x - glyphLayout.width, y - glyphLayout.height);
     }
 
     public void printRightOf(int x, int y, String message)
