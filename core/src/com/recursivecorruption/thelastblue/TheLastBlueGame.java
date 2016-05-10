@@ -4,9 +4,11 @@ import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.recursivecorruption.thelastblue.graphics.Graphics;
 import com.recursivecorruption.thelastblue.graphics.Renderer;
 import com.sun.corba.se.impl.orbutil.graph.Graph;
@@ -152,13 +154,12 @@ public class TheLastBlueGame implements ApplicationListener {
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         cam.update();
-        //if (Gdx.input.isTouched())
-        //    renderer.circle(Color.GRAY, InputProcessor.getInit(), 20f);
+
+        renderer.begin();
         for (Entity i : entities)
             i.draw(renderer);
-        renderer.generateSquares();
-        renderer.render();
-        renderer.beginText();
+        if (Gdx.input.isTouched())
+            renderer.square(new Color(0.2f,0.2f,0.4f,0.3f), InputProcessor.getInit(), 20f);
         renderer.printCentered((int) (0.8f * Graphics.getSY()), Integer.toString(score + (state == State.PLAY ? (int) Math.pow((double) (maxRad - 15f), 2f) : 0)));
         if (state != State.PLAY) {
             renderer.printCentered((int) (0.4f * Graphics.getSY()), "Avoid the blue boxes");
@@ -170,7 +171,7 @@ public class TheLastBlueGame implements ApplicationListener {
             else
                 renderer.printLeftOf(printX, printY, "High Score:" + highScore, true);
         }
-        renderer.endText();
+        renderer.end();
         Gdx.gl.glDisable(GL20.GL_BLEND);
     }
 
