@@ -22,7 +22,6 @@ public class TheLastBlueGame implements ApplicationListener {
     private List<Entity> entities;
     private Random rand;
     private Player player;
-    private int maxRad;
     private Renderer renderer;
     private int numEnemies;
     private Music playMusic, beginMusic;
@@ -87,14 +86,12 @@ public class TheLastBlueGame implements ApplicationListener {
 
     public void update() {
         InputProcessor.update();
-        maxRad = 15;
+        Enemy.refresh();
         numEnemies = 0;
         boolean justDied = false;
         List<Entity> remove = new ArrayList<Entity>();
         List<Entity> create = new ArrayList<Entity>();
         for (Entity i : entities) {
-            if (i instanceof Enemy)
-                maxRad = Math.max(maxRad, (int) i.radius);
             Entity j = i.update(entities);
             if (j instanceof Enemy) {
                 ++numEnemies;
@@ -110,9 +107,9 @@ public class TheLastBlueGame implements ApplicationListener {
         entities.removeAll(remove);
         entities.addAll(create);
         if (justDied)
-            score += (int) Math.pow((double) (maxRad - 15f), 2f);
+            score += (int) Math.pow((double) (Enemy.getMaxRad() - 15f), 2f);
 
-        if (numEnemies < 50 && rand.nextInt(2 + ((100 * 1000) / (1000 + score + (int) Math.pow((double) maxRad, 2f)))) == 1) {
+        if (numEnemies < 50 && rand.nextInt(2 + ((100 * 1000) / (1000 + score + (int) Math.pow((double) Enemy.getMaxRad(), 2f)))) == 1) {
             int width = rand.nextInt(Graphics.getSX());
             int height = rand.nextInt(Graphics.getSY());
             if (rand.nextInt(2) == 1)
@@ -149,7 +146,7 @@ public class TheLastBlueGame implements ApplicationListener {
             i.draw(renderer);
         if (Gdx.input.isTouched())
             renderer.square(new Color(0.4f, 0.4f, 0.8f, 0.2f), InputProcessor.getInit(), 30f);
-        renderer.printCentered((int) (0.8f * Graphics.getSY()), Integer.toString(score + (state == State.PLAY ? (int) Math.pow((double) (maxRad - 15f), 2f) : 0)));
+        renderer.printCentered((int) (0.8f * Graphics.getSY()), Integer.toString(score + (state == State.PLAY ? (int) Math.pow((double) (Enemy.getMaxRad() - 15f), 2f) : 0)));
         if (state != State.PLAY) {
             renderer.printCentered((int) (0.4f * Graphics.getSY()), "Avoid the blue boxes");
             renderer.printCentered((int) (0.6f * Graphics.getSY()), "Tap to begin");

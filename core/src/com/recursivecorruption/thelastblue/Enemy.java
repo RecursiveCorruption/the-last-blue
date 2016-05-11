@@ -13,6 +13,7 @@ public class Enemy extends Entity {
     Player player;
     private float speed;
     private double angle = -200.25f;
+    private static float maxRad = 15f;
 
     public Enemy(float x, float y, Player player) {
         super(new Color(0.1f, 1f, 1f, 1f), 15f, x, y, 0, 0);
@@ -20,6 +21,16 @@ public class Enemy extends Entity {
         recalcColor();
         recalcSpeed();
         rand = new Random();
+    }
+
+    public static void refresh()
+    {
+        maxRad = 15f;
+    }
+
+    public static float getMaxRad()
+    {
+        return maxRad;
     }
 
     private void recalcColor() {
@@ -32,6 +43,7 @@ public class Enemy extends Entity {
 
     @Override
     public Entity update(List<Entity> entities) {
+        maxRad = Math.max(maxRad, radius);
         vel.set((float) (speed * Math.cos(angle)), (float) (speed * Math.sin(angle)));
         if (radius > Enemy.EXPLODE_SIZE) {
             TheLastBlueGame.addScore((int) Math.pow(radius, 2));
