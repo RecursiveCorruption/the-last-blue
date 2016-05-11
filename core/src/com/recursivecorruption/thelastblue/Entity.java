@@ -23,24 +23,22 @@ public abstract class Entity {
     }
 
     public boolean collides(Entity other) {
-        return pos.x+radius>=other.pos.x&&pos.x<=other.pos.x+other.radius&&pos.y+radius>=other.pos.y&&pos.y<=other.pos.y+other.radius;
+        return pos.x + radius >= other.pos.x && pos.x <= other.pos.x + other.radius && pos.y + radius >= other.pos.y && pos.y <= other.pos.y + other.radius;
     }
 
     public void draw(Renderer renderer) {
         renderer.square(color, pos, radius);
     }
 
-    public List<Entity> createParticles()
-    {
+    public List<Entity> createParticles() {
         return createParticles(false);
     }
 
-    public List<Entity> createParticles(boolean noFade)
-    {
+    public List<Entity> createParticles(boolean noFade) {
         List<Entity> particles = new ArrayList<Entity>();
-        for (float x = pos.x; x <= pos.x+radius;x+= Particle.PARTICLE_SIZE)
-            for (float y = pos.y; y <= pos.y+radius;y+= Particle.PARTICLE_SIZE)
-                particles.add(new Particle(x,y,vel.x*0.3f+60f*(rand.nextFloat()-0.5f), vel.y*0.3f+60f*(rand.nextFloat()-0.5f), color, Particle.PARTICLE_SIZE, noFade));
+        for (float x = pos.x; x <= pos.x + radius; x += Particle.PARTICLE_SIZE)
+            for (float y = pos.y; y <= pos.y + radius; y += Particle.PARTICLE_SIZE)
+                particles.add(new Particle(x, y, vel.x * 0.3f + 60f * (rand.nextFloat() - 0.5f), vel.y * 0.3f + 60f * (rand.nextFloat() - 0.5f), color, Particle.PARTICLE_SIZE, noFade));
         return particles;
     }
 

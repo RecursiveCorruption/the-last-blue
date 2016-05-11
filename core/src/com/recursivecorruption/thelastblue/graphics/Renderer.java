@@ -3,22 +3,20 @@ package com.recursivecorruption.thelastblue.graphics;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.graphics.Texture;
 
-public class Renderer
-{
+public class Renderer {
     private BitmapFont largeFont, smallFont;
     private SpriteBatch batch;
     private Sprite pxSpr;
 
-    public Renderer(OrthographicCamera cam)
-    {
+    public Renderer(OrthographicCamera cam) {
         Texture tex = new Texture(Gdx.files.internal("px.png"));
         pxSpr = new Sprite(tex);
         batch = new SpriteBatch();
@@ -28,10 +26,9 @@ public class Renderer
         updateFont(Graphics.getSX(), Graphics.getSY());
     }
 
-    private void updateFont(int width, int height)
-    {
+    private void updateFont(int width, int height) {
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = (int)Math.min(width / 10f, height/6f);
+        parameter.size = (int) Math.min(width / 10f, height / 6f);
         parameter.characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.!'()>?: ";
         parameter.flip = true;
         largeFont.setColor(Color.WHITE);
@@ -45,48 +42,40 @@ public class Renderer
         generator.dispose();
     }
 
-    public void begin()
-    {
-       batch.begin();
+    public void begin() {
+        batch.begin();
     }
 
-    public void end()
-    {
+    public void end() {
         batch.end();
     }
 
-    public void resize(int width, int height)
-    {
+    public void resize(int width, int height) {
         updateFont(width, height);
     }
 
-    public void square(Color color, Vector2 pos, float radius)
-    {
+    public void square(Color color, Vector2 pos, float radius) {
         pxSpr.setScale(radius);
         pxSpr.setCenter(pos.x + radius / 2, pos.y + radius / 2);
         pxSpr.setColor(color);
         pxSpr.draw(batch);
     }
 
-    public void circle(Color color, Vector2 pos, float radius)
-    {
+    public void circle(Color color, Vector2 pos, float radius) {
         //TODO: Add circle rendering
     }
 
-    public void dispose()
-    {
+    public void dispose() {
         batch.dispose();
         largeFont.dispose();
         smallFont.dispose();
     }
 
-    public void printCentered(int y, String message)
-    {
+    public void printCentered(int y, String message) {
         printCentered(y, message, false);
     }
 
-    public void printCentered(int y, String message, boolean small)
-    {
+    public void printCentered(int y, String message, boolean small) {
         BitmapFont font = getFont(small);
         GlyphLayout glyphLayout = new GlyphLayout();
         glyphLayout.setText(font, message);
@@ -94,29 +83,25 @@ public class Renderer
     }
 
     private BitmapFont getFont(boolean small) {
-        return small?smallFont:largeFont;
+        return small ? smallFont : largeFont;
     }
 
-    public void printLeftOf(int x, int y, String message)
-    {
+    public void printLeftOf(int x, int y, String message) {
         printLeftOf(x, y, message, false);
     }
 
-    public void printLeftOf(int x, int y, String message, boolean small)
-    {
+    public void printLeftOf(int x, int y, String message, boolean small) {
         BitmapFont font = getFont(small);
         GlyphLayout glyphLayout = new GlyphLayout();
         glyphLayout.setText(font, message);
         font.draw(batch, glyphLayout, x - glyphLayout.width, y - glyphLayout.height);
     }
 
-    public void printRightOf(int x, int y, String message)
-    {
-        printLeftOf(x,y,message, false);
+    public void printRightOf(int x, int y, String message) {
+        printLeftOf(x, y, message, false);
     }
 
-    public void printRightOf(int x, int y, String message, boolean small)
-    {
+    public void printRightOf(int x, int y, String message, boolean small) {
         BitmapFont font = getFont(small);
         GlyphLayout glyphLayout = new GlyphLayout();
         glyphLayout.setText(font, message);

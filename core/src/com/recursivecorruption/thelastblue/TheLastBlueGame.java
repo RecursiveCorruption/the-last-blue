@@ -1,44 +1,39 @@
 package com.recursivecorruption.thelastblue;
 
-import com.badlogic.gdx.Preferences;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.recursivecorruption.thelastblue.graphics.Graphics;
 import com.recursivecorruption.thelastblue.graphics.Renderer;
-import com.sun.corba.se.impl.orbutil.graph.Graph;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class TheLastBlueGame implements ApplicationListener {
+    private static State state = State.BEGIN;
+    private static int score = 0;
+    Preferences prefs;
     private OrthographicCamera cam;
     private List<Entity> entities;
     private Random rand;
     private Player player;
     private int maxRad;
-    private static State state = State.BEGIN;
     private Renderer renderer;
     private int numEnemies;
-    private static int score = 0;
     private Music playMusic, beginMusic;
     private int highScore = 0;
-    Preferences prefs;
 
-    public static void addScore(int amount)
-    {
-        if (state==State.PLAY)
+    public static void addScore(int amount) {
+        if (state == State.PLAY)
             score += amount;
     }
 
-    private static void increaseVolume(Music music)
-    {
+    private static void increaseVolume(Music music) {
         if (music.getVolume() < 0.999f) {
             if (!music.isPlaying())
                 music.play();
@@ -46,17 +41,11 @@ public class TheLastBlueGame implements ApplicationListener {
         }
     }
 
-    private static void decreaseVolume(Music music)
-    {
+    private static void decreaseVolume(Music music) {
         if (music.getVolume() > 0.001f)
             music.setVolume(music.getVolume() - 0.01f);
         else if (music.isPlaying())
             music.stop();
-    }
-
-    private enum State {
-        BEGIN,
-        PLAY
     }
 
     @Override
@@ -72,7 +61,7 @@ public class TheLastBlueGame implements ApplicationListener {
         beginMusic.setLooping(true);
         beginMusic.setVolume(0f);
         prefs = Gdx.app.getPreferences("Settings");
-        highScore = prefs.getInteger("highScore",0);
+        highScore = prefs.getInteger("highScore", 0);
         reset(false);
     }
 
@@ -82,16 +71,16 @@ public class TheLastBlueGame implements ApplicationListener {
         renderer.resize(width, height);
     }
 
-    private void reset()
-    {
+    private void reset() {
         reset(true);
     }
+
     private void reset(boolean addPlayer) {
         entities = new ArrayList<Entity>();
         player = new Player(Graphics.getSX() / 2f, Graphics.getSY() / 2f);
         if (addPlayer)
             entities.add(player);
-        if (score>highScore)
+        if (score > highScore)
             highScore = score;
         score = 0;
     }
@@ -113,7 +102,7 @@ public class TheLastBlueGame implements ApplicationListener {
                 state = State.BEGIN;
                 justDied = true;
             }
-            if (j!=null) {
+            if (j != null) {
                 create.addAll(j.createParticles());
                 remove.add(j);
             }
@@ -159,14 +148,14 @@ public class TheLastBlueGame implements ApplicationListener {
         for (Entity i : entities)
             i.draw(renderer);
         if (Gdx.input.isTouched())
-            renderer.square(new Color(0.2f,0.2f,0.4f,0.3f), InputProcessor.getInit(), 20f);
+            renderer.square(new Color(0.2f, 0.2f, 0.4f, 0.3f), InputProcessor.getInit(), 20f);
         renderer.printCentered((int) (0.8f * Graphics.getSY()), Integer.toString(score + (state == State.PLAY ? (int) Math.pow((double) (maxRad - 15f), 2f) : 0)));
         if (state != State.PLAY) {
             renderer.printCentered((int) (0.4f * Graphics.getSY()), "Avoid the blue boxes");
             renderer.printCentered((int) (0.6f * Graphics.getSY()), "Tap to begin");
-            int printX = (int)(0.9f*Graphics.getSX());
-            int printY = (int)(0.1f*Graphics.getSX());
-            if (score>highScore)
+            int printX = (int) (0.9f * Graphics.getSX());
+            int printY = (int) (0.1f * Graphics.getSX());
+            if (score > highScore)
                 renderer.printLeftOf(printX, printY, "New High Score!\nOld:" + highScore, true);
             else
                 renderer.printLeftOf(printX, printY, "High Score:" + highScore, true);
@@ -177,7 +166,7 @@ public class TheLastBlueGame implements ApplicationListener {
 
     @Override
     public void pause() {
-        prefs.putInteger("highScore", Math.max(score,highScore));
+        prefs.putInteger("highScore", Math.max(score, highScore));
         prefs.flush();
     }
 
@@ -190,5 +179,10 @@ public class TheLastBlueGame implements ApplicationListener {
     public void dispose() {
         renderer.dispose();
         playMusic.dispose();
+    }
+
+    private enum State {
+        BEGIN,
+        PLAY
     }
 }
