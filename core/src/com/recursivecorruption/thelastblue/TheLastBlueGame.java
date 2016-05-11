@@ -148,7 +148,7 @@ public class TheLastBlueGame implements ApplicationListener {
         for (Entity i : entities)
             i.draw(renderer);
         if (Gdx.input.isTouched())
-            renderer.square(new Color(0.2f, 0.2f, 0.4f, 0.3f), InputProcessor.getInit(), 20f);
+            renderer.square(new Color(0.4f, 0.4f, 0.8f, 0.2f), InputProcessor.getInit(), 30f);
         renderer.printCentered((int) (0.8f * Graphics.getSY()), Integer.toString(score + (state == State.PLAY ? (int) Math.pow((double) (maxRad - 15f), 2f) : 0)));
         if (state != State.PLAY) {
             renderer.printCentered((int) (0.4f * Graphics.getSY()), "Avoid the blue boxes");
