@@ -14,6 +14,7 @@ public class Enemy extends Entity {
     private float speed;
     private double angle = -200.25f;
     private static float maxRad = 15f;
+    private static int count = 0;
 
     public Enemy(float x, float y, Player player) {
         super(new Color(0.1f, 1f, 1f, 1f), 15f, x, y, 0, 0);
@@ -25,10 +26,16 @@ public class Enemy extends Entity {
 
     public static void refresh() {
         maxRad = 15f;
+        count = 0;
     }
 
     public static float getMaxRad() {
         return maxRad;
+    }
+
+    public static int getCount()
+    {
+        return count;
     }
 
     private void recalcColor() {
@@ -39,12 +46,18 @@ public class Enemy extends Entity {
         speed = 300f;//(float)(50.0 - 50.0*EXPLODE_AREA/((EXPLODE_AREA-Math.min(Math.pow((double)radius,2.0),EXPLODE_AREA-1.0))));
     }
 
+    private void updateStaticVariables()
+    {
+        maxRad = Math.max(maxRad, radius);
+        ++count;
+    }
+
     @Override
     public Entity update(List<Entity> entities) {
-        maxRad = Math.max(maxRad, radius);
+        updateStaticVariables();
         vel.set((float) (speed * Math.cos(angle)), (float) (speed * Math.sin(angle)));
         if (radius > Enemy.EXPLODE_SIZE) {
-            TheLastBlueGame.addScore((int) Math.pow(radius, 2));
+            //TODO:Find a way to add to the world instance's score: TheLastBlueGame.addScore((int) Math.pow(radius, 2));
             return this;
         }
         for (Entity i : entities) {

@@ -16,21 +16,13 @@ import java.util.Random;
 
 public class TheLastBlueGame implements ApplicationListener {
     private static State state = State.BEGIN;
-    private static int score = 0;
+
     Preferences prefs;
     private OrthographicCamera cam;
-    private List<Entity> entities;
     private Random rand;
-    private Player player;
     private Renderer renderer;
     private int numEnemies;
     private Music playMusic, beginMusic;
-    private int highScore = 0;
-
-    public static void addScore(int amount) {
-        if (state == State.PLAY)
-            score += amount;
-    }
 
     private static void increaseVolume(Music music) {
         if (music.getVolume() < 0.999f) {
@@ -60,8 +52,8 @@ public class TheLastBlueGame implements ApplicationListener {
         beginMusic.setLooping(true);
         beginMusic.setVolume(0f);
         prefs = Gdx.app.getPreferences("Settings");
-        highScore = prefs.getInteger("highScore", 0);
-        reset(false);
+        World.init(prefs);
+        //TODO:world.reset(false);
     }
 
     @Override
@@ -70,61 +62,16 @@ public class TheLastBlueGame implements ApplicationListener {
         renderer.resize((int)(width*Graphics.getScaleConstant()), (int)(height*Graphics.getScaleConstant()), cam);
     }
 
-    private void reset() {
-        reset(true);
-    }
-
-    private void reset(boolean addPlayer) {
-        entities = new ArrayList<Entity>();
-        player = new Player(Graphics.getSX() / 2f, Graphics.getSY() / 2f);
-        if (addPlayer)
-            entities.add(player);
-        if (score > highScore)
-            highScore = score;
-        score = 0;
-    }
-
     public void update() {
         InputProcessor.update();
-        Enemy.refresh();
-        numEnemies = 0;
-        boolean justDied = false;
-        List<Entity> remove = new ArrayList<Entity>();
-        List<Entity> create = new ArrayList<Entity>();
-        for (Entity i : entities) {
-            Entity j = i.update(entities);
-            if (j instanceof Enemy) {
-                ++numEnemies;
-            } else if (j instanceof Player) {
-                state = State.BEGIN;
-                justDied = true;
-            }
-            if (j != null) {
-                create.addAll(j.createParticles());
-                remove.add(j);
-            }
-        }
-        entities.removeAll(remove);
-        entities.addAll(create);
-        if (justDied)
-            score += (int) Math.pow((double) (Enemy.getMaxRad() - 15f), 2f);
-
-        if (numEnemies < 50 && rand.nextInt(2 + ((100 * 1000) / (1000 + score + (int) Math.pow((double) Enemy.getMaxRad(), 2f)))) == 1) {
-            int width = rand.nextInt(Graphics.getSX());
-            int height = rand.nextInt(Graphics.getSY());
-            if (rand.nextInt(2) == 1)
-                width = Graphics.getSX() * rand.nextInt(2);
-            else
-                height = Graphics.getSY() * rand.nextInt(2);
-            entities.add(new Enemy(width, height, player));
-        }
+        //TODO:world.update()
 
         if (state == State.BEGIN) {
             decreaseVolume(playMusic);
             increaseVolume(beginMusic);
             if (Gdx.input.justTouched()) {
                 state = State.PLAY;
-                reset();
+                //TODO:world.reset();
             }
         } else {
             decreaseVolume(beginMusic);
@@ -142,20 +89,20 @@ public class TheLastBlueGame implements ApplicationListener {
         cam.update();
 
         renderer.begin();
-        for (Entity i : entities)
-            i.draw(renderer);
+        //TODO:world.render(renderer);
         if (Gdx.input.isTouched())
             renderer.square(new Color(0.4f, 0.4f, 0.8f, 0.2f), InputProcessor.getInit(), 30f);
+        int score = 0;//TODO: = world.getScore();
         renderer.printCentered((int) (0.8f * Graphics.getSY()), Integer.toString(score + (state == State.PLAY ? (int) Math.pow((double) (Enemy.getMaxRad() - 15f), 2f) : 0)));
         if (state != State.PLAY) {
             renderer.printCentered((int) (0.4f * Graphics.getSY()), "Avoid the blue boxes");
             renderer.printCentered((int) (0.6f * Graphics.getSY()), "Tap to begin");
             int printX = (int) (0.9f * Graphics.getSX());
             int printY = (int) (0.1f * Graphics.getSX());
-            if (score > highScore)
-                renderer.printLeftOf(printX, printY, "New High Score!\nOld:" + highScore, true);
+            if (false)//TODO: world.getScore() > World.getHighScore())
+                renderer.printLeftOf(printX, printY, "New High Score!\nOld:" +  World.getHighScore(), true);
             else
-                renderer.printLeftOf(printX, printY, "High Score:" + highScore, true);
+                renderer.printLeftOf(printX, printY, "High Score:" +  World.getHighScore(), true);
         }
         renderer.end();
         Gdx.gl.glDisable(GL20.GL_BLEND);
@@ -163,7 +110,8 @@ public class TheLastBlueGame implements ApplicationListener {
 
     @Override
     public void pause() {
-        prefs.putInteger("highScore", Math.max(score, highScore));
+        //TODO:world.updateHighSchore();
+        World.pause(prefs);
         prefs.flush();
     }
 
@@ -178,7 +126,7 @@ public class TheLastBlueGame implements ApplicationListener {
         playMusic.dispose();
     }
 
-    private enum State {
+    public enum State {
         BEGIN,
         PLAY
     }
