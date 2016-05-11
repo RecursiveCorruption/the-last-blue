@@ -23,13 +23,11 @@ public class Enemy extends Entity {
         rand = new Random();
     }
 
-    public static void refresh()
-    {
+    public static void refresh() {
         maxRad = 15f;
     }
 
-    public static float getMaxRad()
-    {
+    public static float getMaxRad() {
         return maxRad;
     }
 
@@ -53,24 +51,18 @@ public class Enemy extends Entity {
             if (this == i || !(i instanceof Enemy))
                 continue;
             if (collides(i)) {
-                if (true || i.radius == radius) {
-                    Entity toDie, toLive;
-                    if (radius < i.radius) {
-                        toDie = this;
-                        toLive = i;
-                    } else {
-                        toDie = i;
-                        toLive = this;
-                    }
-                    toLive.radius = (int) Math.sqrt(Math.pow((double) toLive.radius, 2) + Math.pow((double) toDie.radius, 2));
-                    ((Enemy) toLive).recalcColor();
-                    ((Enemy) toLive).recalcSpeed();
-                    return toDie;
+                Entity toDie, toLive;
+                if (radius < i.radius) {
+                    toDie = this;
+                    toLive = i;
                 } else {
-                    float dX = (pos.x + radius) / 2f - (radius + i.pos.x) / 2;
-                    if (dX > 0)
-                        pos.x += i.pos.x + radius;
+                    toDie = i;
+                    toLive = this;
                 }
+                toLive.radius = (int) Math.sqrt(Math.pow((double) toLive.radius, 2) + Math.pow((double) toDie.radius, 2));
+                ((Enemy) toLive).recalcColor();
+                ((Enemy) toLive).recalcSpeed();
+                return toDie;
             }
         }
         Vector2 delta = new Vector2(player.pos);
