@@ -67,8 +67,8 @@ public class TheLastBlueGame implements ApplicationListener {
 
     @Override
     public void resize(int width, int height) {
-        cam.setToOrtho(true, Graphics.getSX(), Graphics.getSY());
-        renderer.resize(width, height);
+        cam.setToOrtho(true, (int)(width*Graphics.getScaleConstant()), (int)(height*Graphics.getScaleConstant()));
+        renderer.resize((int)(width*Graphics.getScaleConstant()), (int)(height*Graphics.getScaleConstant()), cam);
     }
 
     private void reset() {

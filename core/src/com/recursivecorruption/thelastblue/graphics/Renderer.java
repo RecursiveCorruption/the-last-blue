@@ -50,8 +50,9 @@ public class Renderer {
         batch.end();
     }
 
-    public void resize(int width, int height) {
+    public void resize(int width, int height, OrthographicCamera cam) {
         updateFont(width, height);
+        batch.setProjectionMatrix(cam.combined);
     }
 
     public void square(Color color, Vector2 pos, float radius) {
