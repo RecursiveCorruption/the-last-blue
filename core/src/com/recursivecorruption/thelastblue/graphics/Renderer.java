@@ -2,34 +2,25 @@ package com.recursivecorruption.thelastblue.graphics;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.VertexAttribute;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.graphics.glutils.ShaderProgram;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.graphics.Texture;
 
 public class Renderer
 {
     private BitmapFont largeFont, smallFont;
     private SpriteBatch batch;
-    private OrthographicCamera cam;
     private Sprite pxSpr;
 
     public Renderer(OrthographicCamera cam)
     {
         Texture tex = new Texture(Gdx.files.internal("px.png"));
         pxSpr = new Sprite(tex);
-        this.cam = cam;
         batch = new SpriteBatch();
         batch.setProjectionMatrix(cam.combined);
         largeFont = new BitmapFont();
