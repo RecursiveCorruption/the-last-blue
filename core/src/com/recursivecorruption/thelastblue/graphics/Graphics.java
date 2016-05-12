@@ -3,7 +3,7 @@ package com.recursivecorruption.thelastblue.graphics;
 import com.badlogic.gdx.Gdx;
 
 public class Graphics {
-    private static float SCREEN_SCALE = 1.5f;
+    private static final float SCREEN_SCALE = 1.5f;
 
     public static float getScaleConstant() {
         return SCREEN_SCALE / ((Gdx.graphics.getDensity() + (Gdx.graphics.getHeight() / 630f)) / 2f);
