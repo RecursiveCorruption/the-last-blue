@@ -21,23 +21,9 @@ public class TheLastBlueGame implements ApplicationListener {
     private OrthographicCamera cam;
     private Random rand;
     private Renderer renderer;
-    private Music playMusic, beginMusic;
+    SoundManager soundManager;
+
     private World world;
-
-    private static void increaseVolume(Music music) {
-        if (music.getVolume() < 0.999f) {
-            if (!music.isPlaying())
-                music.play();
-            music.setVolume(music.getVolume() + 0.01f);
-        }
-    }
-
-    private static void decreaseVolume(Music music) {
-        if (music.getVolume() > 0.001f)
-            music.setVolume(music.getVolume() - 0.01f);
-        else if (music.isPlaying())
-            music.stop();
-    }
 
     @Override
     public void create() {
@@ -45,12 +31,7 @@ public class TheLastBlueGame implements ApplicationListener {
         cam.setToOrtho(true, Graphics.getSX(), Graphics.getSY());
         rand = new Random();
         renderer = new Renderer(cam);
-        playMusic = Gdx.audio.newMusic(Gdx.files.internal("Song.mp3"));
-        playMusic.setLooping(true);
-        playMusic.setVolume(0f);
-        beginMusic = Gdx.audio.newMusic(Gdx.files.internal("SadBg.mp3"));
-        beginMusic.setLooping(true);
-        beginMusic.setVolume(0f);
+        soundManager = new SoundManager();
         prefs = Gdx.app.getPreferences("Settings");
         World.init(prefs);
         world = new World();
@@ -65,17 +46,13 @@ public class TheLastBlueGame implements ApplicationListener {
     public void update() {
         InputProcessor.update();
         state = world.update(rand, state);
+        soundManager.update(state);
 
         if (state == State.BEGIN) {
-            decreaseVolume(playMusic);
-            increaseVolume(beginMusic);
             if (Gdx.input.justTouched()) {
                 state = State.PLAY;
                 world.reset(true);
             }
-        } else {
-            decreaseVolume(beginMusic);
-            increaseVolume(playMusic);
         }
     }
 
@@ -123,7 +100,7 @@ public class TheLastBlueGame implements ApplicationListener {
     @Override
     public void dispose() {
         renderer.dispose();
-        playMusic.dispose();
+        soundManager.dispose();
     }
 
     public enum State {
