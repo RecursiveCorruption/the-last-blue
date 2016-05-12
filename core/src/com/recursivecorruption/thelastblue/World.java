@@ -1,6 +1,5 @@
 package com.recursivecorruption.thelastblue;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.recursivecorruption.thelastblue.graphics.Graphics;
 import com.recursivecorruption.thelastblue.graphics.Renderer;
@@ -15,32 +14,41 @@ public class World {
     private int score = 0;
     private static int highScore;
 
-    public static void init(Preferences prefs)
-    {
+    public World() {
+        reset();
+    }
+
+    public static void init(Preferences prefs) {
         highScore = prefs.getInteger("highScore", 0);
     }
 
-    public static void pause(Preferences prefs)
-    {
+    public static void pause(Preferences prefs) {
         prefs.putInteger("highScore", highScore);
     }
 
-    public static int getHighScore()
-    {
+    public static int getHighScore() {
         return highScore;
     }
 
-    private void reset() {
-        reset(true);
+    public int getScore() {
+        return score;
     }
 
-    private void reset(boolean addPlayer) {
+    public void updateHighScore() {
+        if (score > highScore)
+            highScore = score;
+    }
+
+    public void reset() {
+        reset(false);
+    }
+
+    public void reset(boolean addPlayer) {
         entities = new ArrayList<Entity>();
         player = new Player(Graphics.getSX() / 2f, Graphics.getSY() / 2f);
         if (addPlayer)
             entities.add(player);
-        if (score > highScore)
-            highScore = score;
+        updateHighScore();
         score = 0;
     }
 
@@ -48,11 +56,11 @@ public class World {
         Enemy.refresh();
         List<Entity> remove = new ArrayList<Entity>();
         List<Entity> create = new ArrayList<Entity>();
+        boolean hasDied = false;
         for (Entity i : entities) {
             Entity j = i.update(entities);
             if (j instanceof Player) {
-                score += (int) Math.pow((double) (Enemy.getMaxRad() - 15f), 2f);
-                return TheLastBlueGame.State.BEGIN;
+                hasDied = true;
             }
             if (j != null) {
                 create.addAll(j.createParticles());
@@ -61,6 +69,10 @@ public class World {
         }
         entities.removeAll(remove);
         entities.addAll(create);
+        if (hasDied) {
+            score += (int) Math.pow((double) (Enemy.getMaxRad() - 15f), 2f);
+            return TheLastBlueGame.State.BEGIN;
+        }
 
         if (Enemy.getCount() < 50 && rand.nextInt(2 + ((100 * 1000) / (1000 + score + (int) Math.pow((double) Enemy.getMaxRad(), 2f)))) == 1) {
             int width = rand.nextInt(Graphics.getSX());
@@ -74,8 +86,7 @@ public class World {
         return state;
     }
 
-    public void render(Renderer renderer)
-    {
+    public void render(Renderer renderer) {
         for (Entity i : entities)
             i.draw(renderer);
     }

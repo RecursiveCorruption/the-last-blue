@@ -21,8 +21,8 @@ public class TheLastBlueGame implements ApplicationListener {
     private OrthographicCamera cam;
     private Random rand;
     private Renderer renderer;
-    private int numEnemies;
     private Music playMusic, beginMusic;
+    private World world;
 
     private static void increaseVolume(Music music) {
         if (music.getVolume() < 0.999f) {
@@ -53,7 +53,7 @@ public class TheLastBlueGame implements ApplicationListener {
         beginMusic.setVolume(0f);
         prefs = Gdx.app.getPreferences("Settings");
         World.init(prefs);
-        //TODO:world.reset(false);
+        world = new World();
     }
 
     @Override
@@ -64,14 +64,14 @@ public class TheLastBlueGame implements ApplicationListener {
 
     public void update() {
         InputProcessor.update();
-        //TODO:world.update()
+        state = world.update(rand, state);
 
         if (state == State.BEGIN) {
             decreaseVolume(playMusic);
             increaseVolume(beginMusic);
             if (Gdx.input.justTouched()) {
                 state = State.PLAY;
-                //TODO:world.reset();
+                world.reset(true);
             }
         } else {
             decreaseVolume(beginMusic);
@@ -89,17 +89,17 @@ public class TheLastBlueGame implements ApplicationListener {
         cam.update();
 
         renderer.begin();
-        //TODO:world.render(renderer);
+        world.render(renderer);
         if (Gdx.input.isTouched())
             renderer.square(new Color(0.4f, 0.4f, 0.8f, 0.2f), InputProcessor.getInit(), 30f);
-        int score = 0;//TODO: = world.getScore();
+        int score = world.getScore();
         renderer.printCentered((int) (0.8f * Graphics.getSY()), Integer.toString(score + (state == State.PLAY ? (int) Math.pow((double) (Enemy.getMaxRad() - 15f), 2f) : 0)));
         if (state != State.PLAY) {
             renderer.printCentered((int) (0.4f * Graphics.getSY()), "Avoid the blue boxes");
             renderer.printCentered((int) (0.6f * Graphics.getSY()), "Tap to begin");
             int printX = (int) (0.9f * Graphics.getSX());
             int printY = (int) (0.1f * Graphics.getSX());
-            if (false)//TODO: world.getScore() > World.getHighScore())
+            if (world.getScore() > World.getHighScore())
                 renderer.printLeftOf(printX, printY, "New High Score!\nOld:" +  World.getHighScore(), true);
             else
                 renderer.printLeftOf(printX, printY, "High Score:" +  World.getHighScore(), true);
@@ -110,7 +110,7 @@ public class TheLastBlueGame implements ApplicationListener {
 
     @Override
     public void pause() {
-        //TODO:world.updateHighSchore();
+        world.updateHighScore();
         World.pause(prefs);
         prefs.flush();
     }
