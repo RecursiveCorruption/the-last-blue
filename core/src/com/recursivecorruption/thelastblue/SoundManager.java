@@ -30,8 +30,8 @@ public class SoundManager {
             music.stop();
     }
 
-    void update(TheLastBlueGame.State state) {
-        if (state == TheLastBlueGame.State.BEGIN) {
+    void update(GameState state) {
+        if (state == GameState.BEGIN) {
             decreaseVolume(playMusic);
             increaseVolume(beginMusic);
         } else {

@@ -66,7 +66,7 @@ public class World {
         score = 0;
     }
 
-    public TheLastBlueGame.State update(Random rand, TheLastBlueGame.State state) {
+    public GameState update(Random rand, GameState state) {
         Enemy.refresh();
         List<Entity> remove = new ArrayList<Entity>();
         List<Entity> create = new ArrayList<Entity>();
@@ -85,7 +85,7 @@ public class World {
         entities.addAll(create);
         if (hasDied) {
             score += (int) Math.pow((double) (Enemy.getMaxRad() - 15f), 2f);
-            return TheLastBlueGame.State.BEGIN;
+            return GameState.BEGIN;
         }
 
         if (Enemy.getCount() < 50 && rand.nextInt(2 + ((100 * 1000) / (1000 + score + (int) Math.pow((double) Enemy.getMaxRad(), 2f)))) == 1) {

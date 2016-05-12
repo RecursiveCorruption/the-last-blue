@@ -3,19 +3,16 @@ package com.recursivecorruption.thelastblue;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.recursivecorruption.thelastblue.graphics.Graphics;
 import com.recursivecorruption.thelastblue.graphics.Renderer;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 public class TheLastBlueGame implements ApplicationListener {
-    private static State state = State.BEGIN;
+    private static GameState state = GameState.BEGIN;
 
     Preferences prefs;
     private OrthographicCamera cam;
@@ -48,9 +45,9 @@ public class TheLastBlueGame implements ApplicationListener {
         state = world.update(rand, state);
         soundManager.update(state);
 
-        if (state == State.BEGIN) {
+        if (state == GameState.BEGIN) {
             if (Gdx.input.justTouched()) {
-                state = State.PLAY;
+                state = GameState.PLAY;
                 world.reset(true);
             }
         }
@@ -70,8 +67,8 @@ public class TheLastBlueGame implements ApplicationListener {
         if (Gdx.input.isTouched())
             renderer.square(new Color(0.4f, 0.4f, 0.8f, 0.2f), InputProcessor.getInit(), 30f);
         int score = world.getScore();
-        renderer.printCentered((int) (0.8f * Graphics.getSY()), Integer.toString(score + (state == State.PLAY ? (int) Math.pow((double) (Enemy.getMaxRad() - 15f), 2f) : 0)));
-        if (state != State.PLAY) {
+        renderer.printCentered((int) (0.8f * Graphics.getSY()), Integer.toString(score + (state == GameState.PLAY ? (int) Math.pow((double) (Enemy.getMaxRad() - 15f), 2f) : 0)));
+        if (state != GameState.PLAY) {
             renderer.printCentered((int) (0.4f * Graphics.getSY()), "Avoid the blue boxes");
             renderer.printCentered((int) (0.6f * Graphics.getSY()), "Tap to begin");
             int printX = (int) (0.9f * Graphics.getSX());
@@ -103,8 +100,4 @@ public class TheLastBlueGame implements ApplicationListener {
         soundManager.dispose();
     }
 
-    public enum State {
-        BEGIN,
-        PLAY
-    }
 }
