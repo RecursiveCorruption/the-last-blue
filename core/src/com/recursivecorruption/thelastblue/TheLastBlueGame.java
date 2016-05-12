@@ -13,13 +13,11 @@ import java.util.Random;
 
 public class TheLastBlueGame implements ApplicationListener {
     private static GameState state = GameState.BEGIN;
-
-    Preferences prefs;
+    private Preferences prefs;
     private OrthographicCamera cam;
     private Random rand;
     private Renderer renderer;
-    SoundManager soundManager;
-
+    private SoundManager soundManager;
     private World world;
 
     @Override
@@ -36,8 +34,8 @@ public class TheLastBlueGame implements ApplicationListener {
 
     @Override
     public void resize(int width, int height) {
-        cam.setToOrtho(true, (int)(width*Graphics.getScaleConstant()), (int)(height*Graphics.getScaleConstant()));
-        renderer.resize((int)(width*Graphics.getScaleConstant()), (int)(height*Graphics.getScaleConstant()), cam);
+        cam.setToOrtho(true, (int) (width * Graphics.getScaleConstant()), (int) (height * Graphics.getScaleConstant()));
+        renderer.resize((int) (width * Graphics.getScaleConstant()), (int) (height * Graphics.getScaleConstant()), cam);
     }
 
     public void update() {
@@ -74,9 +72,9 @@ public class TheLastBlueGame implements ApplicationListener {
             int printX = (int) (0.9f * Graphics.getSX());
             int printY = (int) (0.1f * Graphics.getSX());
             if (world.getScore() > World.getHighScore())
-                renderer.printLeftOf(printX, printY, "New High Score!\nOld:" +  World.getHighScore(), true);
+                renderer.printLeftOf(printX, printY, "New High Score!\nOld:" + World.getHighScore(), true);
             else
-                renderer.printLeftOf(printX, printY, "High Score:" +  World.getHighScore(), true);
+                renderer.printLeftOf(printX, printY, "High Score:" + World.getHighScore(), true);
         }
         renderer.end();
         Gdx.gl.glDisable(GL20.GL_BLEND);
