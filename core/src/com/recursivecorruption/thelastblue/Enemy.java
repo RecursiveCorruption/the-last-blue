@@ -60,7 +60,7 @@ public class Enemy extends Entity {
         updateStaticVariables();
         vel.set((float) (speed * Math.cos(angle)), (float) (speed * Math.sin(angle)));
         if (radius > Enemy.EXPLODE_SIZE) {
-            //TODO:Find a way to add to the world instance's score: TheLastBlueGame.addScore((int) Math.pow(radius, 2));
+            world.addScore((int) Math.pow(radius, 2));
             return this;
         }
         for (Entity i : world.getEntities()) {

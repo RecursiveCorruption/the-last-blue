@@ -43,6 +43,11 @@ public class World {
         return score;
     }
 
+    public void addScore(int amount)
+    {
+        score += amount;
+    }
+
     public void updateHighScore() {
         if (score > highScore)
             highScore = score;
