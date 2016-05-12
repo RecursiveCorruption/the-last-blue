@@ -43,5 +43,5 @@ public abstract class Entity {
     }
 
     //Returns the entities to remove
-    public abstract Entity update(List<Entity> entities);
+    public abstract Entity update(World world);
 }

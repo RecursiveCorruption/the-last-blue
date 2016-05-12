@@ -25,7 +25,7 @@ public class Particle extends Entity {
     }
 
     @Override
-    public Entity update(List<Entity> entities) {
+    public Entity update(World world) {
         color.a = (float) life / (float) FULL_LIFE;
         pos.add(vel.cpy().scl(Gdx.graphics.getDeltaTime()));
         if (noFade) {

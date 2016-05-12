@@ -33,7 +33,7 @@ public class Player extends Entity {
     }
 
     @Override
-    public Entity update(List<Entity> entities) {
+    public Entity update(World world) {
         float cap = 4000f * Graphics.getScaleConstant(), accel = 40f, mult = 1f;
         if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
             mult = 0;
@@ -66,7 +66,7 @@ public class Player extends Entity {
             vel.x = 0;
         if (oldY != pos.y)
             vel.y = 0;
-        for (Entity i : entities)
+        for (Entity i : world.getEntities())
             if (i instanceof Enemy && collides(i))
                 return this;
         return null;

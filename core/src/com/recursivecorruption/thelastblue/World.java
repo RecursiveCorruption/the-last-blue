@@ -18,6 +18,15 @@ public class World {
         reset();
     }
 
+    public List<Entity> getEntities() {
+        return entities;
+    }
+
+    public Player getPlayer()
+    {
+        return player;
+    }
+
     public static void init(Preferences prefs) {
         highScore = prefs.getInteger("highScore", 0);
     }
@@ -58,7 +67,7 @@ public class World {
         List<Entity> create = new ArrayList<Entity>();
         boolean hasDied = false;
         for (Entity i : entities) {
-            Entity j = i.update(entities);
+            Entity j = i.update(this);
             if (j instanceof Player) {
                 hasDied = true;
             }

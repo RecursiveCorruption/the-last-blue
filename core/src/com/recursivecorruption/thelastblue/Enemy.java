@@ -10,7 +10,6 @@ import java.util.Random;
 public class Enemy extends Entity {
     public static float EXPLODE_SIZE = 65f;
     private static float EXPLODE_AREA = (float) Math.pow(EXPLODE_SIZE, 2);
-    Player player;
     private float speed;
     private double angle = -200.25f;
     private static float maxRad = 15f;
@@ -18,10 +17,14 @@ public class Enemy extends Entity {
 
     public Enemy(float x, float y, Player player) {
         super(new Color(0.1f, 1f, 1f, 1f), 15f, x, y, 0, 0);
-        this.player = player;
         recalcColor();
         recalcSpeed();
         rand = new Random();
+    }
+
+    public void set(Enemy other)
+    {
+
     }
 
     public static void refresh() {
@@ -53,14 +56,14 @@ public class Enemy extends Entity {
     }
 
     @Override
-    public Entity update(List<Entity> entities) {
+    public Entity update(World world) {
         updateStaticVariables();
         vel.set((float) (speed * Math.cos(angle)), (float) (speed * Math.sin(angle)));
         if (radius > Enemy.EXPLODE_SIZE) {
             //TODO:Find a way to add to the world instance's score: TheLastBlueGame.addScore((int) Math.pow(radius, 2));
             return this;
         }
-        for (Entity i : entities) {
+        for (Entity i : world.getEntities()) {
             if (this == i || !(i instanceof Enemy))
                 continue;
             if (collides(i)) {
@@ -78,7 +81,7 @@ public class Enemy extends Entity {
                 return toDie;
             }
         }
-        Vector2 delta = new Vector2(player.pos);
+        Vector2 delta = new Vector2(world.getPlayer().pos);
         delta.sub(pos);
         double newAngle = delta.angleRad();
         if (newAngle > Math.PI)
