@@ -4,21 +4,26 @@ import com.badlogic.gdx.Gdx;
 
 public class Graphics {
     private static final float SCREEN_SCALE = 1.5f;
+    private static float scaleConstant;
 
     public static float getScaleConstant() {
-        return SCREEN_SCALE / ((Gdx.graphics.getDensity() + (Gdx.graphics.getHeight() / 630f)) / 2f);
+        return scaleConstant;
+    }
+
+    public static void updateScaleConstant() {
+        scaleConstant = SCREEN_SCALE / ((Gdx.graphics.getDensity() + (Gdx.graphics.getHeight() / 630f)) / 2f);
     }
 
     public static int getInputX() {
-        return (int) (getScaleConstant() * Gdx.input.getX());
+        return (int) (scaleConstant * Gdx.input.getX());
     }
 
     public static int getInputY() {
-        return (int) (getScaleConstant() * Gdx.input.getY());
+        return (int) (scaleConstant * Gdx.input.getY());
     }
 
     public static int getSX() {
-        return (int) (getScaleConstant() * Gdx.graphics.getWidth());
+        return (int) (scaleConstant * Gdx.graphics.getWidth());
     }
 
     public static int getSY() {

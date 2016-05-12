@@ -30,12 +30,14 @@ public class TheLastBlueGame implements ApplicationListener {
         prefs = Gdx.app.getPreferences("Settings");
         World.init(prefs);
         world = new World();
+        Graphics.updateScaleConstant();
     }
 
     @Override
     public void resize(int width, int height) {
         cam.setToOrtho(true, (int) (width * Graphics.getScaleConstant()), (int) (height * Graphics.getScaleConstant()));
         renderer.resize((int) (width * Graphics.getScaleConstant()), (int) (height * Graphics.getScaleConstant()), cam);
+        Graphics.updateScaleConstant();
     }
 
     public void update() {
