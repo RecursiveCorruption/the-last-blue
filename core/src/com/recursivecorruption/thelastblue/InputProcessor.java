@@ -13,13 +13,13 @@ public final class InputProcessor {
     //Called once per frame somewhere else
     public static void update() {
         if (Gdx.input.justTouched())
-            pos.set(Graphics.getX(), Graphics.getY());
+            pos.set(Graphics.getInputX(), Graphics.getInputY());
         else if (!Gdx.input.isTouched())
             pos.set(0, 0);
     }
 
     public static Vector2 getDelta() {
-        return pos.cpy().sub(Graphics.getX(), Graphics.getY()).scl(-1);
+        return pos.cpy().sub(Graphics.getInputX(), Graphics.getInputY()).scl(-1);
     }
 
     public static Vector2 getInit() {

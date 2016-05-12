@@ -9,11 +9,11 @@ public class Graphics {
         return SCREEN_SCALE / ((Gdx.graphics.getDensity() + (Gdx.graphics.getHeight() / 630f)) / 2f);
     }
 
-    public static int getX() {
+    public static int getInputX() {
         return (int) (getScaleConstant() * Gdx.input.getX());
     }
 
-    public static int getY() {
+    public static int getInputY() {
         return (int) (getScaleConstant() * Gdx.input.getY());
     }
 
