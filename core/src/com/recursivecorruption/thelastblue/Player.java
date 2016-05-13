@@ -34,19 +34,19 @@ public class Player extends Entity {
 
     @Override
     public Entity update(World world) {
-        float cap = 4000f * Graphics.getScaleConstant(), accel = 40f, mult = 1f;
+        float accel = 40f, mult = 1f;
         if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
             mult = 0;
             accel = 500;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.DOWN))
-            vel.y = Math.min(cap, vel.y * mult + accel);
+            vel.y = vel.y * mult + accel;
         if (Gdx.input.isKeyPressed(Input.Keys.UP))
-            vel.y = Math.max(-cap, vel.y * mult - accel);
+            vel.y = vel.y * mult - accel;
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT))
-            vel.x = Math.min(cap, vel.x * mult + accel);
+            vel.x = vel.x * mult + accel;
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT))
-            vel.x = Math.max(-cap, vel.x * mult - accel);
+            vel.x = vel.x * mult - accel;
         else if (Gdx.input.isTouched())
             vel.set(InputProcessor.getDelta().scl(TOUCH_MULTIPLY));
         else if (!vel.epsilonEquals(0f, 0f, 0.0001f)) {
