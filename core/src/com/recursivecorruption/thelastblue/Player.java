@@ -13,21 +13,43 @@ public class Player extends Entity {
         super(new Color(1f, 0.1f, 0.1f, 1f), 30, x, y, 0, 0);
     }
 
+    static final class CustomKeys
+    {
+        static final int DOWN = 0, UP = 1, RIGHT = 2, LEFT = 3, NONE = 4;
+    }
+
+    static final int[] ARROW_KEYS = {Input.Keys.DOWN, Input.Keys.UP, Input.Keys.RIGHT, Input.Keys.LEFT};
+
+    private int getPressedArrow()
+    {
+        for (int i=0; i<ARROW_KEYS.length; ++i)
+            if (Gdx.input.isKeyPressed(ARROW_KEYS[i]))
+                return i;
+        return CustomKeys.NONE;
+    }
+
     private void handleInput() {
         float accel = 40f, mult = 1f;
         if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
             mult = 0;
             accel = 500;
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.DOWN))
-            vel.y = vel.y * mult + accel;
-        if (Gdx.input.isKeyPressed(Input.Keys.UP))
-            vel.y = vel.y * mult - accel;
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT))
-            vel.x = vel.x * mult + accel;
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT))
-            vel.x = vel.x * mult - accel;
-        else if (Gdx.input.isTouched())
+        switch(getPressedArrow())
+        {
+            case CustomKeys.DOWN:
+                vel.y = vel.y * mult + accel;
+                break;
+            case CustomKeys.UP:
+                vel.y = vel.y * mult - accel;
+                break;
+            case CustomKeys.RIGHT:
+                vel.x = vel.x * mult + accel;
+                break;
+            case CustomKeys.LEFT:
+                vel.x = vel.x * mult - accel;
+                break;
+        }
+        if (Gdx.input.isTouched())
             vel.set(InputProcessor.getDelta().scl(TOUCH_MULTIPLY));
     }
 
