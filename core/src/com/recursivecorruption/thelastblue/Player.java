@@ -1,54 +1,29 @@
 package com.recursivecorruption.thelastblue;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.Vector2;
 import com.recursivecorruption.thelastblue.graphics.Graphics;
 
 public class Player extends Entity {
     public final static float FRICTION = 0.99f;
     private final static float TOUCH_MULTIPLY = 4.0f;
+    private static final float KEY_ACC = 40f;
+    private static final Vector2[] KEY_SIGNS = {new Vector2(0f, 1f), new Vector2(0f, -1f), new Vector2(1f, 0f), new Vector2(-1f, 0f)};
+    private static final Vector2[] KEY_ACCELS = {KEY_SIGNS[0].cpy().scl(KEY_ACC), KEY_SIGNS[1].cpy().scl(KEY_ACC), KEY_SIGNS[2].cpy().scl(KEY_ACC), KEY_SIGNS[3].cpy().scl(KEY_ACC)};
+    private Vector2 acc;
 
     public Player(float x, float y) {
         super(new Color(1f, 0.1f, 0.1f, 1f), 30, x, y, 0, 0);
-    }
-
-    static final class CustomKeys
-    {
-        static final int DOWN = 0, UP = 1, RIGHT = 2, LEFT = 3, NONE = 4;
-    }
-
-    static final int[] ARROW_KEYS = {Input.Keys.DOWN, Input.Keys.UP, Input.Keys.RIGHT, Input.Keys.LEFT};
-
-    private int getPressedArrow()
-    {
-        for (int i=0; i<ARROW_KEYS.length; ++i)
-            if (Gdx.input.isKeyPressed(ARROW_KEYS[i]))
-                return i;
-        return CustomKeys.NONE;
+        acc = new Vector2();
     }
 
     private void handleInput() {
-        float accel = 40f, mult = 1f;
-        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
-            mult = 0;
-            accel = 500;
-        }
-        switch(getPressedArrow())
-        {
-            case CustomKeys.DOWN:
-                vel.y = vel.y * mult + accel;
-                break;
-            case CustomKeys.UP:
-                vel.y = vel.y * mult - accel;
-                break;
-            case CustomKeys.RIGHT:
-                vel.x = vel.x * mult + accel;
-                break;
-            case CustomKeys.LEFT:
-                vel.x = vel.x * mult - accel;
-                break;
-        }
+        acc.set(0, 0);
+        boolean[] pressed = InputProcessor.CustomKeys.getPressed();
+        for (int i = 0; i < InputProcessor.CustomKeys.NUM_KEYS; ++i)
+            if (pressed[i])
+                acc.add(KEY_ACCELS[i]);
         if (Gdx.input.isTouched())
             vel.set(InputProcessor.getDelta().scl(TOUCH_MULTIPLY));
     }
@@ -57,6 +32,7 @@ public class Player extends Entity {
     public Entity update(World world) {
         handleInput();
         vel.scl(FRICTION);
+        vel.add(acc);
         pos.add(vel.x * Gdx.graphics.getDeltaTime(), vel.y * Gdx.graphics.getDeltaTime());
         float oldX = pos.x, oldY = pos.y;
         pos.x = Math.max(Math.min(Graphics.getSX() - radius, pos.x), 0);
