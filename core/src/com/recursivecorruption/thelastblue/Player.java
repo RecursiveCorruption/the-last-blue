@@ -10,12 +10,9 @@ import java.util.Random;
 
 public class Player extends Entity {
     public final static float FRICTION = 0.99f, TOUCH_MULTIPLY = 4.0f;
-    public int score = 0;
-    private Random rand;
 
     public Player(float x, float y) {
         super(new Color(1f, 0.1f, 0.1f, 1f), 30, x, y, 0, 0);
-        rand = new Random();
     }
 
     @Override
