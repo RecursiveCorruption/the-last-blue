@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Random;
 
 public class Player extends Entity {
-    public final static float FRICTION = 2f, TOUCH_MULTIPLY = 4.0f;
+    public final static float FRICTION = 0.99f, TOUCH_MULTIPLY = 4.0f;
     public int score = 0;
     private Random rand;
 
@@ -49,15 +49,7 @@ public class Player extends Entity {
             vel.x = vel.x * mult - accel;
         else if (Gdx.input.isTouched())
             vel.set(InputProcessor.getDelta().scl(TOUCH_MULTIPLY));
-        else if (!vel.epsilonEquals(0f, 0f, 0.0001f)) {
-            float xS = vel.x < 0 ? -1 : 1;
-            float yS = vel.y < 0 ? -1 : 1;
-            vel.sub(xS * FRICTION, yS * FRICTION);
-            if (xS != (vel.x < 0 ? -1 : 1))
-                vel.x = 0f;
-            if (yS != (vel.y < 0 ? -1 : 1))
-                vel.y = 0f;
-        }
+        vel.scl(FRICTION);
         pos.add(vel.x * Gdx.graphics.getDeltaTime(), vel.y * Gdx.graphics.getDeltaTime());
         float oldX = pos.x, oldY = pos.y;
         pos.x = Math.max(Math.min(Graphics.getSX() - radius, pos.x), 0);
