@@ -18,20 +18,6 @@ public class Player extends Entity {
         rand = new Random();
     }
 
-    private static float accel(float velo) {
-        return 30f;//100f*(1f-Math.max(0f,Math.min(1f,Math.max(0,Math.abs(velo)-500)/1500)));
-    }
-
-    public void createParticles(List<Particle> particles) {
-        createParticles(particles, false);
-    }
-
-    public void createParticles(List<Particle> particles, boolean noFade) {
-        for (float x = pos.x; x <= pos.x + radius; x += Particle.PARTICLE_SIZE)
-            for (float y = pos.y; y <= pos.y + radius; y += Particle.PARTICLE_SIZE)
-                particles.add(new Particle(x, y, Gdx.graphics.getDeltaTime() * vel.x * 0.3f + (rand.nextFloat() - 0.5f), Gdx.graphics.getDeltaTime() * vel.y * 0.3f + (rand.nextFloat() - 0.5f), color, Particle.PARTICLE_SIZE, noFade));
-    }
-
     @Override
     public Entity update(World world) {
         float accel = 40f, mult = 1f;
