@@ -9,7 +9,8 @@ import java.util.List;
 import java.util.Random;
 
 public class Player extends Entity {
-    public final static float FRICTION = 0.99f, TOUCH_MULTIPLY = 4.0f;
+    public final static float FRICTION = 0.99f;
+    private final static float TOUCH_MULTIPLY = 4.0f;
 
     public Player(float x, float y) {
         super(new Color(1f, 0.1f, 0.1f, 1f), 30, x, y, 0, 0);
