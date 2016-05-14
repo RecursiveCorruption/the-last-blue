@@ -10,7 +10,7 @@ public enum GameState {
     PLAY {
         @Override
         GameState update(World world) {
-            return this;
+            return world.update(this);
         }
 
         @Override
@@ -29,7 +29,7 @@ public enum GameState {
                 world.reset(true);
                 return PLAY;
             }
-            return this;
+            return world.update(this);
         }
 
         @Override

@@ -40,7 +40,6 @@ public class TheLastBlueGame implements ApplicationListener {
 
     public void update() {
         InputProcessor.update();
-        state = world.update(state);
         soundManager.update(state);
         state = state.update(world);
     }
