@@ -57,7 +57,7 @@ public class Player extends Entity {
     }
 
     @Override
-    public Entity update(World world) {
+    public Entity update(World world, GameState state) {
         handleInput();
         vel.scl(FRICTION);
         vel.add(acc);

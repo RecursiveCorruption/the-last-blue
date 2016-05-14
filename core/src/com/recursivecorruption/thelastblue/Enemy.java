@@ -56,11 +56,12 @@ public class Enemy extends Entity {
     }
 
     @Override
-    public Entity update(World world) {
+    public Entity update(World world, GameState state) {
         updateStaticVariables();
         vel.set((float) (speed * Math.cos(angle)), (float) (speed * Math.sin(angle)));
         if (radius > Enemy.EXPLODE_SIZE) {
-            world.addScore((int) Math.pow(radius, 2));
+            if (state == GameState.PLAY)
+                world.addScore((int) Math.pow(radius, 2));
             return this;
         }
         for (Entity i : world.getEntities()) {

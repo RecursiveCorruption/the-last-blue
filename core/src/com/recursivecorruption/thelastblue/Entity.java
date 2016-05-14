@@ -1,6 +1,7 @@
 package com.recursivecorruption.thelastblue;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 import com.badlogic.gdx.math.Vector2;
 import com.recursivecorruption.thelastblue.graphics.Renderer;
 
@@ -47,5 +48,5 @@ public abstract class Entity {
     }
 
     //Returns the entities to remove
-    public abstract Entity update(World world);
+    public abstract Entity update(World world, GameState state);
 }

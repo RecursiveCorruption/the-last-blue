@@ -20,7 +20,7 @@ public class Particle extends Entity {
     }
 
     @Override
-    public Entity update(World world) {
+    public Entity update(World world, GameState state) {
         color.a = (float) life / (float) FULL_LIFE;
         pos.add(vel.cpy().scl(Gdx.graphics.getDeltaTime()));
         if (noFade) {

@@ -72,7 +72,7 @@ public class World {
         List<Entity> create = new ArrayList<Entity>();
         boolean hasDied = false;
         for (Entity i : entities) {
-            Entity j = i.update(this);
+            Entity j = i.update(this, state);
             if (j instanceof Player) {
                 hasDied = true;
             }
