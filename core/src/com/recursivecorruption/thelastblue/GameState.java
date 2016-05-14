@@ -18,8 +18,8 @@ public enum GameState {
             world.render(renderer);
             if (Gdx.input.isTouched())
                 renderer.square(new Color(0.4f, 0.4f, 0.8f, 0.2f), InputProcessor.getInit(), 30f);
-            int score = world.getScore();
-            renderer.printCentered((int) (0.8f * Graphics.getSY()), Integer.toString(score + (int) Math.pow((double) (Enemy.getMaxRad() - 15f), 2f)));
+            int currentScore = world.getScore()+(int) Math.pow(Enemy.getMaxRad() - 15.0, 2.0);
+            renderer.printCentered((int) (0.8f * Graphics.getSY()), Integer.toString(currentScore));
         }
     },
     BEGIN {
