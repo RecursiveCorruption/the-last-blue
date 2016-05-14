@@ -15,7 +15,6 @@ public class TheLastBlueGame implements ApplicationListener {
     private static GameState state = GameState.BEGIN;
     private Preferences prefs;
     private OrthographicCamera cam;
-    private Random rand;
     private Renderer renderer;
     private SoundManager soundManager;
     private World world;
@@ -24,7 +23,6 @@ public class TheLastBlueGame implements ApplicationListener {
     public void create() {
         cam = new OrthographicCamera(Graphics.getSX(), Graphics.getSY());
         cam.setToOrtho(true, Graphics.getSX(), Graphics.getSY());
-        rand = new Random();
         renderer = new Renderer(cam);
         soundManager = new SoundManager();
         prefs = Gdx.app.getPreferences("Settings");
@@ -42,7 +40,7 @@ public class TheLastBlueGame implements ApplicationListener {
 
     public void update() {
         InputProcessor.update();
-        state = world.update(rand, state);
+        state = world.update(state);
         soundManager.update(state);
         state = state.update(world);
     }

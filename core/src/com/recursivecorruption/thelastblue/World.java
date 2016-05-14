@@ -12,6 +12,7 @@ public class World {
     private Player player;
     private List<Entity> entities;
     private int score = 0;
+    private Random rand;
     private static int highScore;
 
     public World() {
@@ -62,11 +63,12 @@ public class World {
         player = new Player(Graphics.getSX() / 2f, Graphics.getSY() / 2f);
         if (addPlayer)
             entities.add(player);
+        rand = new Random();
         updateHighScore();
         score = 0;
     }
 
-    public GameState update(Random rand, GameState state) {
+    public GameState update(GameState state) {
         Enemy.refresh();
         List<Entity> remove = new ArrayList<Entity>();
         List<Entity> create = new ArrayList<Entity>();
