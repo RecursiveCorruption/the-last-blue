@@ -44,13 +44,7 @@ public class TheLastBlueGame implements ApplicationListener {
         InputProcessor.update();
         state = world.update(rand, state);
         soundManager.update(state);
-
-        if (state == GameState.BEGIN) {
-            if (Gdx.input.justTouched()) {
-                state = GameState.PLAY;
-                world.reset(true);
-            }
-        }
+        state = state.update(world);
     }
 
     @Override
@@ -61,23 +55,8 @@ public class TheLastBlueGame implements ApplicationListener {
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         cam.update();
-
         renderer.begin();
-        world.render(renderer);
-        if (Gdx.input.isTouched())
-            renderer.square(new Color(0.4f, 0.4f, 0.8f, 0.2f), InputProcessor.getInit(), 30f);
-        int score = world.getScore();
-        renderer.printCentered((int) (0.8f * Graphics.getSY()), Integer.toString(score + (state == GameState.PLAY ? (int) Math.pow((double) (Enemy.getMaxRad() - 15f), 2f) : 0)));
-        if (state != GameState.PLAY) {
-            renderer.printCentered((int) (0.4f * Graphics.getSY()), "Avoid the blue boxes");
-            renderer.printCentered((int) (0.6f * Graphics.getSY()), "Tap to begin");
-            int printX = (int) (0.9f * Graphics.getSX());
-            int printY = (int) (0.1f * Graphics.getSX());
-            if (world.getScore() > World.getHighScore())
-                renderer.printLeftOf(printX, printY, "New High Score!\nOld:" + World.getHighScore(), true);
-            else
-                renderer.printLeftOf(printX, printY, "High Score:" + World.getHighScore(), true);
-        }
+        state.render(world, renderer);
         renderer.end();
         Gdx.gl.glDisable(GL20.GL_BLEND);
     }
