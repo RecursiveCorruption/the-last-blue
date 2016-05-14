@@ -9,7 +9,6 @@ import java.util.List;
 
 public class Particle extends Entity {
     public static final float PARTICLE_SIZE = 5f;
-    private final float FRICTION = 2f;
     private final int FULL_LIFE = 200;
     private final boolean noFade;
     private int life;
@@ -18,10 +17,6 @@ public class Particle extends Entity {
         super(color, radius, x, y, vx, vy);
         life = FULL_LIFE;
         this.noFade = noFade;
-    }
-
-    public Particle(float x, float y, float vx, float vy, Color color, float radius, List<Entity> entities) {
-        this(x, y, vx, vy, color, radius, false);
     }
 
     @Override
