@@ -13,6 +13,7 @@ public abstract class Entity {
     protected Color color;
     protected float radius;
     protected Random rand;
+    private static final float PART_SPREAD = 1.4f, VEL_DECAY = 0.3f;
 
     protected Entity(Color color, float radius, float x, float y, float vx, float vy) {
         this.color = new Color(color);
@@ -38,7 +39,10 @@ public abstract class Entity {
         List<Entity> particles = new ArrayList<Entity>();
         for (float x = pos.x; x <= pos.x + radius; x += Particle.PARTICLE_SIZE)
             for (float y = pos.y; y <= pos.y + radius; y += Particle.PARTICLE_SIZE)
-                particles.add(new Particle(x, y, vel.x * 0.3f + 1.4f * radius * (rand.nextFloat() - 0.5f), vel.y * 0.3f + 1.4f * radius * (rand.nextFloat() - 0.5f), color, Particle.PARTICLE_SIZE, noFade));
+                particles.add(new Particle(x, y
+                        , vel.x * VEL_DECAY + PART_SPREAD * radius * (rand.nextFloat() - 0.5f)
+                        , vel.y * VEL_DECAY + PART_SPREAD * radius * (rand.nextFloat() - 0.5f)
+                        , color, Particle.PARTICLE_SIZE, noFade));
         return particles;
     }
 
