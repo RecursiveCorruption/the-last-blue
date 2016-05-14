@@ -1,6 +1,7 @@
 package com.recursivecorruption.thelastblue;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.recursivecorruption.thelastblue.graphics.Graphics;
@@ -21,9 +22,36 @@ public class Player extends Entity {
     private void handleInput() {
         acc.set(0, 0);
         boolean[] pressed = InputProcessor.CustomKeys.getPressed();
-        for (int i = 0; i < InputProcessor.CustomKeys.NUM_KEYS; ++i)
-            if (pressed[i])
-                acc.add(KEY_ACCELS[i]);
+        final float SPACE_BOOST = 400f;
+        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+            for (int i = 0; i < InputProcessor.CustomKeys.NUM_KEYS; ++i)
+                if (pressed[i]) {
+                    switch (i) {
+                        case InputProcessor.CustomKeys.LEFT:
+                            if (vel.x > -SPACE_BOOST)
+                                vel.x = -SPACE_BOOST;
+                            break;
+                        case InputProcessor.CustomKeys.RIGHT:
+                            if (vel.x < SPACE_BOOST)
+                                vel.x = SPACE_BOOST;
+                            break;
+                        case InputProcessor.CustomKeys.UP:
+                            if (vel.y > -SPACE_BOOST)
+                                vel.y = -SPACE_BOOST;
+                            break;
+                        case InputProcessor.CustomKeys.DOWN:
+                            if (vel.y < SPACE_BOOST)
+                                vel.y = SPACE_BOOST;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+        } else {
+            for (int i = 0; i < InputProcessor.CustomKeys.NUM_KEYS; ++i)
+                if (pressed[i])
+                    acc.add(KEY_ACCELS[i]);
+        }
         if (Gdx.input.isTouched())
             vel.set(InputProcessor.getDelta().scl(TOUCH_MULTIPLY));
     }
