@@ -85,7 +85,7 @@ public class World {
         entities.removeAll(remove);
         entities.addAll(create);
         if (hasDied) {
-            score += (int) Math.pow((double) (Enemy.getMaxRad() - 15f), 2f);
+            score += (int) Math.pow((double) (Enemy.getMaxRad() - Enemy.BEGIN_SIZE), 2f);
             return GameState.MENU;
         }
 

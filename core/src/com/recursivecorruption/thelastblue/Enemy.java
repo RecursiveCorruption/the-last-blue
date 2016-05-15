@@ -7,22 +7,23 @@ import com.badlogic.gdx.math.Vector2;
 import java.util.Random;
 
 public class Enemy extends Entity {
-    public static float EXPLODE_SIZE = 65f;
+    public static float EXPLODE_SIZE = 65f, BEGIN_SIZE = 15f;
     private static float EXPLODE_AREA = (float) Math.pow(EXPLODE_SIZE, 2);
-    private static float maxRad = 15f;
+    private static float maxRad = BEGIN_SIZE;
     private static int count = 0;
     private float speed;
     private double angle = -200.25f;
+    private static final Color smallColor = new Color(0 / 255f, 150 / 255f, 136 / 255f, 1f), bigColor = new Color(255/255f, 255/255f, 255/255f,1f);
 
     public Enemy(float x, float y, Player player) {
-        super(new Color(0.1f, 1f, 1f, 1f), 15f, x, y, 0, 0);
+        super(new Color(0.1f, 1f, 1f, 1f), BEGIN_SIZE, x, y, 0, 0);
         recalcColor();
         recalcSpeed();
         rand = new Random();
     }
 
     public static void refresh() {
-        maxRad = 15f;
+        maxRad = BEGIN_SIZE;
         count = 0;
     }
 
@@ -39,7 +40,8 @@ public class Enemy extends Entity {
     }
 
     private void recalcColor() {
-        color = new Color(radius / EXPLODE_SIZE, 0.2f, 1 - radius / EXPLODE_SIZE, 1f);
+        float r = (radius - BEGIN_SIZE) / (EXPLODE_SIZE - BEGIN_SIZE);
+        color = new Color(bigColor.r * r + smallColor.r * (1 - r), bigColor.g * r + smallColor.g * (1 - r), bigColor.b * r + smallColor.b * (1 - r), 1f);
     }
 
     private void recalcSpeed() {

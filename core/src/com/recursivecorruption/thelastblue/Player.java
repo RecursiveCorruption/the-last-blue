@@ -15,7 +15,7 @@ public class Player extends Entity {
     private Vector2 acc;
 
     public Player(float x, float y) {
-        super(new Color(1f, 0.1f, 0.1f, 1f), 30, x, y, 0, 0);
+        super(new Color(244/255f, 67/255f, 54/255f, 1f), 30, x, y, 0, 0);
         acc = new Vector2();
     }
 

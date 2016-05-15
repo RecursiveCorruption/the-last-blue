@@ -23,8 +23,8 @@ public class TheLastBlueGame implements ApplicationListener {
         GameMenu menu = new GameMenu();
         menu.addTitle("The Last Blue");
         menu.addSpacer();
-        menu.addButton("Play", GameState.PLAY, Color.ORANGE);
-        menu.addButton("Instructions", GameState.PLAY, Color.GREEN);
+        menu.addButton("Play", GameState.PLAY, new Color(244/255f, 67/255f, 54/255f, 1f));
+        menu.addButton("Instructions", GameState.PLAY, new Color(0/255f, 150/255f, 136/255f, 1f));
         menu.calcPositions();
         return menu;
     }
@@ -66,7 +66,7 @@ public class TheLastBlueGame implements ApplicationListener {
 
     private void drawBackground() {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        Gdx.gl.glClearColor(0f, 0.2f, 0.3f, 1f);
+        Gdx.gl.glClearColor(0/255f, 72/255f, 75/255f, 1f);
     }
 
     @Override
