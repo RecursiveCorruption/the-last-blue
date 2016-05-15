@@ -24,7 +24,7 @@ public enum GameState {
         public void render(World world, Renderer renderer, GameMenu menu) {
             world.render(renderer);
             if (Gdx.input.isTouched())
-                renderer.square(new Color(0.4f, 0.4f, 0.8f, 0.2f), InputProcessor.getInit(), 30f);
+                renderer.square(new Color(0.4f, 0.7f, 0.8f, 0.2f), InputProcessor.getInit(), 30f);
             int currentScore = world.getScore() + (int) Math.pow(Enemy.getMaxRad() - Enemy.BEGIN_SIZE, 2.0);
             renderer.printCentered((int) (0.8f * Graphics.getSY()), Integer.toString(currentScore));
         }
