@@ -85,7 +85,7 @@ public class World {
         entities.addAll(create);
         if (hasDied) {
             score += (int) Math.pow((double) (Enemy.getMaxRad() - 15f), 2f);
-            return GameState.BEGIN;
+            return GameState.MENU;
         }
 
         if (Enemy.getCount() < 50 && rand.nextInt(2 + ((100 * 1000) / (1000 + score + (int) Math.pow((double) Enemy.getMaxRad(), 2f)))) == 1) {

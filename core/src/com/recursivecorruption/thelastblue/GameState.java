@@ -22,7 +22,7 @@ public enum GameState {
             renderer.printCentered((int) (0.8f * Graphics.getSY()), Integer.toString(currentScore));
         }
     },
-    BEGIN {
+    MENU {
         @Override
         public GameState update(World world) {
             if (Gdx.input.justTouched()) {

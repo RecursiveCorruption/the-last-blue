@@ -9,7 +9,7 @@ import com.recursivecorruption.thelastblue.graphics.Graphics;
 import com.recursivecorruption.thelastblue.graphics.Renderer;
 
 public class TheLastBlueGame implements ApplicationListener {
-    private static GameState state = GameState.BEGIN;
+    private static GameState state = GameState.MENU;
     private Preferences prefs;
     private OrthographicCamera cam;
     private Renderer renderer;

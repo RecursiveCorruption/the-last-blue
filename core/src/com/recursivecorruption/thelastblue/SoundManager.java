@@ -17,7 +17,7 @@ public class SoundManager {
         current = beginMusic = Gdx.audio.newMusic(Gdx.files.internal("SadBg.mp3"));
         beginMusic.setLooping(true);
         beginMusic.setVolume(0f);
-        stateMap.put(GameState.BEGIN, beginMusic);
+        stateMap.put(GameState.MENU, beginMusic);
         stateMap.put(GameState.PLAY, playMusic);
     }
 
