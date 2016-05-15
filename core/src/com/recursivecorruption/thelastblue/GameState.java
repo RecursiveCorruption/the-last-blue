@@ -59,6 +59,23 @@ public enum GameState {
             else
                 renderer.printLeftOf(printX, printY, "High Score:" + World.getHighScore(), true);
         }
+    }, INSTRUCTIONS {
+        @Override
+        public GameState update(World world, GameMenu menu) {
+            world.update(this);
+            if (Gdx.input.isTouched())
+                return PLAY;
+            return null;
+        }
+
+        @Override
+        public void render(World world, Renderer renderer, GameMenu menu) {
+            world.render(renderer);
+            float height = Graphics.getSY();
+            renderer.printCentered((int)(0.4f*height), "Avoid the blue boxes.", true);
+            renderer.printCentered((int)(0.5f*height), "Gain points as", true);
+            renderer.printCentered((int)(0.6f*height), "blue boxes collide", true);
+        }
     };
 
     public abstract GameState update(World world, GameMenu menu);

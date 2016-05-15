@@ -24,7 +24,7 @@ public class TheLastBlueGame implements ApplicationListener {
         menu.addTitle("The Last Blue");
         menu.addSpacer();
         menu.addButton("Play", GameState.PLAY, new Color(244/255f, 67/255f, 54/255f, 1f));
-        menu.addButton("Instructions", GameState.PLAY, new Color(0/255f, 150/255f, 136/255f, 1f));
+        menu.addButton("Instructions", GameState.INSTRUCTIONS, new Color(0/255f, 150/255f, 136/255f, 1f));
         menu.calcPositions();
         return menu;
     }

@@ -19,6 +19,7 @@ public class SoundManager {
         beginMusic.setVolume(0f);
         stateMap.put(GameState.MENU, beginMusic);
         stateMap.put(GameState.PLAY, playMusic);
+        stateMap.put(GameState.INSTRUCTIONS, beginMusic);
     }
 
     private static void increaseVolume(Music music) {
