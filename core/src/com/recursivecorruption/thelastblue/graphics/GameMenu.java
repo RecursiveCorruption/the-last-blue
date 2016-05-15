@@ -10,6 +10,18 @@ import java.util.List;
 
 public class GameMenu {
 
+    class Spacer extends UIElement {
+        public Spacer() {
+        }
+
+        public GameState update() {
+            return null;
+        }
+
+        public void draw(Renderer renderer) {
+        }
+    }
+
     class Title extends UIElement {
         public Title(String label) {
             this.label = label;
@@ -97,6 +109,10 @@ public class GameMenu {
 
     public void addTitle(String label) {
         elements.add(new Title(label));
+    }
+
+    public void addSpacer() {
+        elements.add(new Spacer());
     }
 
     // Must be called after adding all elements

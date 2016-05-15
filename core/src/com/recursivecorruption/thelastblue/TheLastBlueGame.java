@@ -22,6 +22,7 @@ public class TheLastBlueGame implements ApplicationListener {
     private static GameMenu createMainMenu() {
         GameMenu menu = new GameMenu();
         menu.addTitle("The Last Blue");
+        menu.addSpacer();
         menu.addButton("Play", GameState.PLAY, Color.ORANGE);
         menu.addButton("Instructions", GameState.PLAY, Color.GREEN);
         menu.calcPositions();
