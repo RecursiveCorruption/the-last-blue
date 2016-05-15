@@ -36,14 +36,12 @@ public class SoundManager {
             music.stop();
     }
 
-    void onNewState(GameState state)
-    {
+    void onNewState(GameState state) {
         previous = current;
         current = stateMap.get(state);
     }
 
-    void update()
-    {
+    void update() {
         decreaseVolume(previous);
         increaseVolume(current);
     }

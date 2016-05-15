@@ -49,8 +49,8 @@ public enum GameState {
     };
 
     abstract GameState update(World world);
-    void onEnter(SoundManager manager)
-    {
+
+    void onEnter(SoundManager manager) {
         manager.onNewState(this);
     }
 

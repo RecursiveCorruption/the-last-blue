@@ -9,23 +9,14 @@ import java.util.List;
 import java.util.Random;
 
 public class World {
+    private static int highScore;
     private Player player;
     private List<Entity> entities;
     private int score = 0;
     private Random rand;
-    private static int highScore;
 
     public World() {
         reset();
-    }
-
-    public List<Entity> getEntities() {
-        return entities;
-    }
-
-    public Player getPlayer()
-    {
-        return player;
     }
 
     public static void init(Preferences prefs) {
@@ -40,12 +31,19 @@ public class World {
         return highScore;
     }
 
+    public List<Entity> getEntities() {
+        return entities;
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
     public int getScore() {
         return score;
     }
 
-    public void addScore(int amount)
-    {
+    public void addScore(int amount) {
         score += amount;
     }
 

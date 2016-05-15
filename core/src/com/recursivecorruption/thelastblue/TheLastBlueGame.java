@@ -3,13 +3,10 @@ package com.recursivecorruption.thelastblue;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.recursivecorruption.thelastblue.graphics.Graphics;
 import com.recursivecorruption.thelastblue.graphics.Renderer;
-
-import java.util.Random;
 
 public class TheLastBlueGame implements ApplicationListener {
     private static GameState state = GameState.BEGIN;
@@ -38,11 +35,9 @@ public class TheLastBlueGame implements ApplicationListener {
         Graphics.updateScaleConstant();
     }
 
-    void updateState()
-    {
+    void updateState() {
         GameState newState = state.update(world);
-        if (newState != state)
-        {
+        if (newState != state) {
             state = newState;
             state.onEnter(soundManager);
         }
@@ -54,8 +49,7 @@ public class TheLastBlueGame implements ApplicationListener {
         updateState();
     }
 
-    private void drawBackground()
-    {
+    private void drawBackground() {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         Gdx.gl.glClearColor(0f, 0.2f, 0.3f, 1f);
     }

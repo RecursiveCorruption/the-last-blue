@@ -4,27 +4,21 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 
-import java.util.List;
 import java.util.Random;
 
 public class Enemy extends Entity {
     public static float EXPLODE_SIZE = 65f;
     private static float EXPLODE_AREA = (float) Math.pow(EXPLODE_SIZE, 2);
-    private float speed;
-    private double angle = -200.25f;
     private static float maxRad = 15f;
     private static int count = 0;
+    private float speed;
+    private double angle = -200.25f;
 
     public Enemy(float x, float y, Player player) {
         super(new Color(0.1f, 1f, 1f, 1f), 15f, x, y, 0, 0);
         recalcColor();
         recalcSpeed();
         rand = new Random();
-    }
-
-    public void set(Enemy other)
-    {
-
     }
 
     public static void refresh() {
@@ -36,9 +30,12 @@ public class Enemy extends Entity {
         return maxRad;
     }
 
-    public static int getCount()
-    {
+    public static int getCount() {
         return count;
+    }
+
+    public void set(Enemy other) {
+
     }
 
     private void recalcColor() {
@@ -49,8 +46,7 @@ public class Enemy extends Entity {
         speed = 300f;//(float)(50.0 - 50.0*EXPLODE_AREA/((EXPLODE_AREA-Math.min(Math.pow((double)radius,2.0),EXPLODE_AREA-1.0))));
     }
 
-    private void updateStaticVariables()
-    {
+    private void updateStaticVariables() {
         maxRad = Math.max(maxRad, radius);
         ++count;
     }

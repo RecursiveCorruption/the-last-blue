@@ -1,7 +1,6 @@
 package com.recursivecorruption.thelastblue;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 import com.badlogic.gdx.math.Vector2;
 import com.recursivecorruption.thelastblue.graphics.Renderer;
 
@@ -10,11 +9,11 @@ import java.util.List;
 import java.util.Random;
 
 public abstract class Entity {
+    private static final float PART_SPREAD = 1.4f, VEL_DECAY = 0.3f;
     protected Vector2 pos, vel;
     protected Color color;
     protected float radius;
     protected Random rand;
-    private static final float PART_SPREAD = 1.4f, VEL_DECAY = 0.3f;
 
     protected Entity(Color color, float radius, float x, float y, float vx, float vy) {
         this.color = new Color(color);
