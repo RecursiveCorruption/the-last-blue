@@ -18,7 +18,7 @@ public enum GameState {
             world.render(renderer);
             if (Gdx.input.isTouched())
                 renderer.square(new Color(0.4f, 0.4f, 0.8f, 0.2f), InputProcessor.getInit(), 30f);
-            int currentScore = world.getScore()+(int) Math.pow(Enemy.getMaxRad() - 15.0, 2.0);
+            int currentScore = world.getScore() + (int) Math.pow(Enemy.getMaxRad() - 15.0, 2.0);
             renderer.printCentered((int) (0.8f * Graphics.getSY()), Integer.toString(currentScore));
         }
     },
@@ -49,6 +49,10 @@ public enum GameState {
     };
 
     abstract GameState update(World world);
+    void onEnter(SoundManager manager)
+    {
+        manager.onNewState(this);
+    }
 
     abstract void render(World world, Renderer renderer);
 }

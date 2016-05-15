@@ -38,10 +38,20 @@ public class TheLastBlueGame implements ApplicationListener {
         Graphics.updateScaleConstant();
     }
 
+    void updateState()
+    {
+        GameState newState = state.update(world);
+        if (newState != state)
+        {
+            state = newState;
+            state.onEnter(soundManager);
+        }
+    }
+
     public void update() {
         InputProcessor.update();
-        soundManager.update(state);
-        state = state.update(world);
+        soundManager.update();
+        updateState();
     }
 
     @Override

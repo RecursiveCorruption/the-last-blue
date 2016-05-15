@@ -3,16 +3,22 @@ package com.recursivecorruption.thelastblue;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 
+import java.util.EnumMap;
+
 public class SoundManager {
     private Music playMusic, beginMusic;
+    private Music current, previous;
+    private EnumMap<GameState, Music> stateMap = new EnumMap<GameState, Music>(GameState.class);
 
     public SoundManager() {
-        playMusic = Gdx.audio.newMusic(Gdx.files.internal("Song.mp3"));
+        previous = playMusic = Gdx.audio.newMusic(Gdx.files.internal("Song.mp3"));
         playMusic.setLooping(true);
         playMusic.setVolume(0f);
-        beginMusic = Gdx.audio.newMusic(Gdx.files.internal("SadBg.mp3"));
+        current = beginMusic = Gdx.audio.newMusic(Gdx.files.internal("SadBg.mp3"));
         beginMusic.setLooping(true);
         beginMusic.setVolume(0f);
+        stateMap.put(GameState.BEGIN, beginMusic);
+        stateMap.put(GameState.PLAY, playMusic);
     }
 
     private static void increaseVolume(Music music) {
@@ -30,18 +36,19 @@ public class SoundManager {
             music.stop();
     }
 
-    void update(GameState state) {
-        if (state == GameState.BEGIN) {
-            decreaseVolume(playMusic);
-            increaseVolume(beginMusic);
-        } else {
-            decreaseVolume(beginMusic);
-            increaseVolume(playMusic);
-        }
+    void onNewState(GameState state)
+    {
+        previous = current;
+        current = stateMap.get(state);
     }
 
-    void dispose()
+    void update()
     {
+        decreaseVolume(previous);
+        increaseVolume(current);
+    }
+
+    void dispose() {
         playMusic.dispose();
         beginMusic.dispose();
     }
