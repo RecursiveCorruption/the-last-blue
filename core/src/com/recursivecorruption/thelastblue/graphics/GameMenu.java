@@ -118,6 +118,10 @@ public class GameMenu {
         }
     }
 
+    public void resize() {
+        calcPositions();
+    }
+
     public void draw(Renderer renderer) {
         for (UIElement i : elements)
             i.draw(renderer);
