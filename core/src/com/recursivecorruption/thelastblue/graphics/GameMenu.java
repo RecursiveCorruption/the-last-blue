@@ -129,7 +129,6 @@ public class GameMenu {
         for (UIElement i : elements) {
             i.size = size.cpy();
             i.pos = pos.cpy();
-            System.out.println(pos.y + "," + Graphics.getSY());
             pos.y += Graphics.getSY() * ELEMENT_GAP + size.y;
         }
     }
