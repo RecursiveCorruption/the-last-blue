@@ -4,12 +4,26 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.recursivecorruption.thelastblue.GameState;
-import com.sun.corba.se.impl.orbutil.graph.Graph;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class GameMenu {
+
+    class Title extends UIElement {
+        public Title(String label) {
+            this.label = label;
+        }
+
+        public GameState update() {
+            return null;
+        }
+
+        public void draw(Renderer renderer) {
+            renderer.printCentered((int) (pos.y + size.y / 2), label);
+        }
+    }
+
     class Button extends UIElement {
         private Color color;
         private GameState onClick;
@@ -24,11 +38,13 @@ public class GameMenu {
             reset();
         }
 
+        @Override
         public void reset() {
             isActive = false;
             wasTouched = false;
         }
 
+        @Override
         public void draw(Renderer renderer) {
             renderer.rectangle(color, pos, size);
             renderer.printCentered((int) pos.y + (int) size.y / 2, label, true);
@@ -42,6 +58,7 @@ public class GameMenu {
             return dx > 0 && dx < size.x && dy > 0 && dy < size.y;
         }
 
+        @Override
         public GameState update() {
             boolean touched = isTouched();
             if (isActive) {
@@ -63,7 +80,8 @@ public class GameMenu {
 
         public abstract GameState update();
 
-        public abstract void reset();
+        public void reset() {
+        }
     }
 
     private List<UIElement> elements;
@@ -77,21 +95,25 @@ public class GameMenu {
         elements.add(new Button(label, resultState, color));
     }
 
+    public void addTitle(String label) {
+        elements.add(new Title(label));
+    }
+
     // Must be called after adding all elements
     public void calcPositions() {
         int margin = Graphics.getMarginPx();
         Vector2 size = new Vector2();
-        size.x = Graphics.getSX() - 2*margin;
-        float ySpace = Graphics.getSY() - 2*margin;
+        size.x = Graphics.getSX() - 2 * margin;
+        float ySpace = Graphics.getSY() - 2 * margin;
         int numElements = elements.size();
-        ySpace -= (numElements - 1) * ELEMENT_GAP*Graphics.getSY();
+        ySpace -= (numElements - 1) * ELEMENT_GAP * Graphics.getSY();
         size.y = ySpace / numElements;
 
-        Vector2 pos = new Vector2((Graphics.getSX()-size.x)/2, margin);
+        Vector2 pos = new Vector2((Graphics.getSX() - size.x) / 2, margin);
         for (UIElement i : elements) {
             i.size = size.cpy();
             i.pos = pos.cpy();
-            System.out.println(pos.y+","+Graphics.getSY());
+            System.out.println(pos.y + "," + Graphics.getSY());
             pos.y += Graphics.getSY() * ELEMENT_GAP + size.y;
         }
     }
