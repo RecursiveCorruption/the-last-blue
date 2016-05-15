@@ -31,6 +31,7 @@ public class TheLastBlueGame implements ApplicationListener {
 
     @Override
     public void create() {
+        Graphics.updateScaleConstant();
         cam = new OrthographicCamera(Graphics.getSX(), Graphics.getSY());
         cam.setToOrtho(true, Graphics.getSX(), Graphics.getSY());
         renderer = new Renderer(cam);
@@ -38,7 +39,6 @@ public class TheLastBlueGame implements ApplicationListener {
         prefs = Gdx.app.getPreferences("Settings");
         World.init(prefs);
         world = new World();
-        Graphics.updateScaleConstant();
         mainMenu = createMainMenu();
     }
 
