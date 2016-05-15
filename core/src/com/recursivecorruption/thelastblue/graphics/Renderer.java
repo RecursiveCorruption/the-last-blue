@@ -56,8 +56,16 @@ public class Renderer {
     }
 
     public void square(Color color, Vector2 pos, float radius) {
-        pxSpr.setScale(radius);
-        pxSpr.setCenter(pos.x + radius / 2, pos.y + radius / 2);
+        rectangle(color, pos, radius, radius);
+    }
+
+    public void rectangle(Color color, Vector2 pos, Vector2 size) {
+        rectangle(color, pos, size.x, size.y);
+    }
+
+    public void rectangle(Color color, Vector2 pos, float sx, float sy) {
+        pxSpr.setScale(sx, sy);
+        pxSpr.setCenter(pos.x + sx / 2, pos.y + sy / 2);
         pxSpr.setColor(color);
         pxSpr.draw(batch);
     }
@@ -95,7 +103,7 @@ public class Renderer {
         BitmapFont font = getFont(small);
         GlyphLayout glyphLayout = new GlyphLayout();
         glyphLayout.setText(font, message);
-        font.draw(batch, glyphLayout, x - glyphLayout.width, y - glyphLayout.height);
+        font.draw(batch, glyphLayout, x - glyphLayout.width, y - glyphLayout.height/2f);
     }
 
     public void printRightOf(int x, int y, String message) {

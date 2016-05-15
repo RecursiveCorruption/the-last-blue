@@ -12,11 +12,12 @@ public class World {
     private static int highScore;
     private Player player;
     private List<Entity> entities;
-    private int score = 0;
+    private int score;
     private Random rand;
 
     public World() {
         reset();
+        score = -1;
     }
 
     public static void init(Preferences prefs) {
@@ -97,7 +98,7 @@ public class World {
                 height = Graphics.getSY() * rand.nextInt(2);
             entities.add(new Enemy(width, height, player));
         }
-        return state;
+        return null;
     }
 
     public void render(Renderer renderer) {

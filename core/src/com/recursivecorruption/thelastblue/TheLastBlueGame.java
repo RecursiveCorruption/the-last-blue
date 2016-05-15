@@ -3,8 +3,10 @@ package com.recursivecorruption.thelastblue;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.recursivecorruption.thelastblue.graphics.GameMenu;
 import com.recursivecorruption.thelastblue.graphics.Graphics;
 import com.recursivecorruption.thelastblue.graphics.Renderer;
 
@@ -15,6 +17,15 @@ public class TheLastBlueGame implements ApplicationListener {
     private Renderer renderer;
     private SoundManager soundManager;
     private World world;
+    GameMenu mainMenu;
+
+    private static GameMenu createMainMenu() {
+        GameMenu menu = new GameMenu();
+        menu.addButton("Play", GameState.PLAY, Color.ORANGE);
+        menu.addButton("Instructions", GameState.PLAY, Color.GREEN);
+        menu.calcPositions();
+        return menu;
+    }
 
     @Override
     public void create() {
@@ -26,6 +37,7 @@ public class TheLastBlueGame implements ApplicationListener {
         World.init(prefs);
         world = new World();
         Graphics.updateScaleConstant();
+        mainMenu = createMainMenu();
     }
 
     @Override
@@ -36,10 +48,10 @@ public class TheLastBlueGame implements ApplicationListener {
     }
 
     void updateState() {
-        GameState newState = state.update(world);
-        if (newState != state) {
+        GameState newState = state.update(world, mainMenu);
+        if (newState != null) {
             state = newState;
-            state.onEnter(soundManager);
+            state.onEnter(world, soundManager, mainMenu);
         }
     }
 
@@ -59,7 +71,7 @@ public class TheLastBlueGame implements ApplicationListener {
         update();
         drawBackground();
         renderer.begin();
-        state.render(world, renderer);
+        state.render(world, renderer, mainMenu);
         renderer.end();
     }
 

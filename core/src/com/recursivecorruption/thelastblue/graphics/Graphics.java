@@ -4,7 +4,13 @@ import com.badlogic.gdx.Gdx;
 
 public class Graphics {
     private static final float SCREEN_SCALE = 1.5f;
+    private static final float MARGIN = 0.2f;
     private static float scaleConstant;
+
+    public static int getMarginPx()
+    {
+        return (int)(Math.min(getSX(), getSY())*MARGIN);
+    }
 
     public static float getScaleConstant() {
         return scaleConstant;
