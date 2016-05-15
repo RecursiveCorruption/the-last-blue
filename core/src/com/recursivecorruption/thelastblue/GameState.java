@@ -9,12 +9,12 @@ public enum GameState {
 
     PLAY {
         @Override
-        GameState update(World world) {
+        public GameState update(World world) {
             return world.update(this);
         }
 
         @Override
-        void render(World world, Renderer renderer) {
+        public void render(World world, Renderer renderer) {
             world.render(renderer);
             if (Gdx.input.isTouched())
                 renderer.square(new Color(0.4f, 0.4f, 0.8f, 0.2f), InputProcessor.getInit(), 30f);
@@ -24,7 +24,7 @@ public enum GameState {
     },
     BEGIN {
         @Override
-        GameState update(World world) {
+        public GameState update(World world) {
             if (Gdx.input.justTouched()) {
                 world.reset(true);
                 return PLAY;
@@ -33,7 +33,7 @@ public enum GameState {
         }
 
         @Override
-        void render(World world, Renderer renderer) {
+        public void render(World world, Renderer renderer) {
             world.render(renderer);
             int score = world.getScore();
             renderer.printCentered((int) (0.8f * Graphics.getSY()), Integer.toString(score));
@@ -48,11 +48,11 @@ public enum GameState {
         }
     };
 
-    abstract GameState update(World world);
+    public abstract GameState update(World world);
 
-    void onEnter(SoundManager manager) {
+    public void onEnter(SoundManager manager) {
         manager.onNewState(this);
     }
 
-    abstract void render(World world, Renderer renderer);
+    public abstract void render(World world, Renderer renderer);
 }
