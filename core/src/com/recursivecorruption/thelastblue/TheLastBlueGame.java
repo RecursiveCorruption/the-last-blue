@@ -54,11 +54,16 @@ public class TheLastBlueGame implements ApplicationListener {
         updateState();
     }
 
+    private void drawBackground()
+    {
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        Gdx.gl.glClearColor(0f, 0.2f, 0.3f, 1f);
+    }
+
     @Override
     public void render() {
         update();
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        Gdx.gl.glClearColor(0f, 0.2f, 0.3f, 1f);
+        drawBackground();
         renderer.begin();
         state.render(world, renderer);
         renderer.end();
