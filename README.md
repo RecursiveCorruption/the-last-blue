@@ -7,7 +7,6 @@
 The goal of this game is to avoid the blue boxes. Points are gained as the boxes combine.
 
 <img alt='Screenshot' src='https://images2.imgbox.com/31/f3/tbF3H3ST_o.png' width=360/>
-<img alt='Screenshot' src='https://images2.imgbox.com/85/4d/tZHFjmYw_o.png' width=360/>
 
 ## Suggestions
 
